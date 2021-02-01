@@ -1,26 +1,21 @@
-# frontend
+# Cómo implementar Vuex con TypeScript
 
-https://soshace.com/building-web-apps-with-vue-3-composition-api-typescript-vuex4-0/
+Este repositorio contiene el código de muestra para la charla del [JSDayCAN2019](https://jsdaycanarias.com/).
 
-## Project setup
-```
-npm install
-```
+Es una primera aproximación basada en mutaciones y acciones usando el [estilo de objetos](https://vuex.vuejs.org/guide/mutations.html#object-style-commit), que nos proporciona tipado en la carga de parámetros.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Tiene relación con la forma de trabajar cuando usamos Redux mediante la exportación de funciones declaradas.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+[Enlace a la charla](https://youtu.be/FmHcLbVYqec)
 
-### Lints and fixes files
-```
-npm run lint
-```
+[Slides de la presentación](https://docs.google.com/presentation/d/1NDcpNpTYI_AveUF2wbtAPGFJqu5OMTMrkskPOOd9FgE/edit?usp=sharing)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Ramas con distintas implementaciones:
+
+- [master](https://github.com/LissetteIbnz/jsdaycan2019-vuex-typescript/tree/master): uso de tipos avanzados de TypeScript y sobre-escritura del tipado de Vuex (nivel básico).
+- [basic-types](https://github.com/LissetteIbnz/jsdaycan2019-vuex-typescript/tree/basic-types): tipado básico.
+- [types-advanced](https://github.com/LissetteIbnz/jsdaycan2019-vuex-typescript/tree/types-advanced): uso de tipos avanzados de TypeScript.
+
+<p align="center" style="background: black; padding: 12px;">
+  <a href="#" rel="noopener" target="_blank"><img width="500" src="https://raw.github.com/LissetteIbnz/jsdaycan2019-vuex-typescript/master/images/jsdaycan2019.svg?sanitize=true" alt="JSDayCAN"></a></p>
+</p>

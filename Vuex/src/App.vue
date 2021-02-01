@@ -1,34 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <span>USER: {{ currentUser.name }}</span>
+  <div style="height: 100%">
+    <router-view style="height: 100%" />
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue';
-import { useStore } from './store/index'
-import { ActionTypes } from './store/actions'
+import Vue from "vue";
+import store, { storeTypes } from "./store";
+import { RootState } from "./store/root.models";
+import { Loader, Snackbar, ShoppingCart, ProductList, Header, Footer } from "./components";
 
-export default defineComponent({
-  name: 'App',
-  components: {
+export default Vue.extend({
+  name: "App",
+  components: { Loader, Snackbar, ShoppingCart, ProductList, Header, Footer },
+  created() {
+    this.reloadProducts();
   },
-  setup() {
-    const store = useStore();
-    onMounted(() => store.dispatch(ActionTypes.GetCurrentUser));
-    const currentUser = computed(() => store.getters.getCurrentUser);
-    console.log(currentUser);
-    return { currentUser };
-  }
+  methods: {
+    reloadProducts() {
+      store.dispatch(storeTypes.products.actions!.getAllProducts());
+    }
+  },
 });
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+#app{
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
