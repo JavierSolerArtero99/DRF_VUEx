@@ -4,26 +4,27 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Footer',
-  props: {
+<script lang="ts">
+import Vue from "vue";
+import store from "../../store";
+
+export default Vue.extend({
+  name: "Footer",
+  computed: {
   }
-}
+});
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .footer {
   width: 100%;
-  height: 8vh;
+  height: 6vh;
 
   position: absolute;
   bottom: 0;
 
-  background-color: #000000;
-  background:linear-gradient(90deg, #ee0979 0%,#ff6a00 100% );
+  background-color: #222222;
+  /* background:linear-gradient(90deg, #ee0979 0%,#ff6a00 100% ); */
   
   color: white;
   font-size: 2vh;
@@ -33,18 +34,4 @@ export default {
   justify-content: center;
 }
 
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>

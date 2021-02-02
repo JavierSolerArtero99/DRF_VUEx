@@ -1,45 +1,38 @@
-import {
-  createStore,
-  Store as VuexStore,
-  CommitOptions,
-  DispatchOptions,
-  createLogger
-} from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
+import { StoreTS, HelperTypes } from "./store.helpers";
+import { RootState, initialRootState } from "./root.models";
+import mutations, { rootMutationsTypes, RootMutations } from "./root.mutations";
+import actions, { rootActionsTypes, RootActions } from "./root.actions";
+import getters, { RootGetters } from "./root.getters";
+import { cart, cartTypes, CartGetters } from "./modules/cart";
+import { products, productsTypes } from "./modules/products";
 
-import { State, state } from './state';
-import { Mutations, mutations } from './mutations';
-import { Actions, actions } from './actions';
-import { Getters, getters } from './getters';
- 
-export const store = createStore<State>({
-  plugins: process.env.NODE_ENV === 'development' ? [createLogger()] : [],
-  state,
+Vue.use(Vuex);
+
+export const store = new Vuex.Store<RootState>({
+  strict: true,
+  state: initialRootState,
   mutations,
   actions,
-  getters
-})
+  getters,
+  modules: {
+    cart,
+    products,
+  },
+});
 
-export function useStore() {
-  return store as Store
-}
+export const rootTypes: HelperTypes<RootMutations, RootActions> = {
+  actions: rootActionsTypes,
+  mutations: rootMutationsTypes,
+};
 
-export type Store = Omit<
-  VuexStore<State>,
-  'getters' | 'commit' | 'dispatch'
-> & {
-  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
-    key: K,
-    payload: P,
-    options?: CommitOptions
-  ): ReturnType<Mutations[K]>;
-} & {
-  dispatch<K extends keyof Actions>(
-    key: K,
-    payload?: Parameters<Actions[K]>[1],
-    options?: DispatchOptions
-  ): ReturnType<Actions[K]>;
-} & {
-  getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>
-  };
-}
+/** Helper types Object */
+export const storeTypes = {
+  root: rootTypes,
+  cart: cartTypes,
+  products: productsTypes,
+};
+
+export * from "./root.models";
+export default store as StoreTS<RootState, RootGetters & CartGetters>;
