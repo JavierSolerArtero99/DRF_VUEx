@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <router-view/>
+    <router-view />
     <Footer />
   </div>
 </template>
@@ -9,18 +9,29 @@
 <script lang="ts">
 import Vue from "vue";
 
-import Header from "../shared/Header.vue"
-import Footer from "../shared/Footer.vue"
+import Header from "../shared/Header.vue";
+import Footer from "../shared/Footer.vue";
+
+import ApiService from "../../common/api.service";
 
 export default Vue.extend({
   name: "Home",
   components: {
     Header,
-    Footer
+    Footer,
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
+    console.log("Entra a mounted");
+    ApiService.get(`products`)
+      .then(({ data }) => {
+        console.log("===SUCCESS===");
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log("===ERROR===");
+        console.log(err);
+      });
   },
 });
 </script>
