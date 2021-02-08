@@ -5,7 +5,7 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
     title = serializers.CharField(required=False)
-    description = serializers.CharField(required=False)
+    description = serializers.CharField(required=True)
     body = serializers.CharField(required=False)
 
     class Meta:
