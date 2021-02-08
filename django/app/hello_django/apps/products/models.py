@@ -24,15 +24,5 @@ class Product(models.Model):
     description = models.TextField()
     body = models.TextField()
 
-    def __init__(self, slug,
-                 title,
-                 description,
-                 body):
-        slug = "product"
-        title = "product"
-
-        description = "product"
-        body = "product"
-
     def __str__(self):
         return self.title
