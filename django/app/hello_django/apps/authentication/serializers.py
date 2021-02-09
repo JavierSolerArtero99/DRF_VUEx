@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 
-from apps.profiles.serializers import ProfileSerializer
+from ..profiles.serializers import ProfileSerializer
 
 from .models import User
 

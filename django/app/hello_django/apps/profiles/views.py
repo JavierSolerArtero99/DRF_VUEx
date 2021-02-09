@@ -40,42 +40,42 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ProfileFollowAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-    renderer_classes = (ProfileJSONRenderer,)
-    serializer_class = ProfileSerializer
+# class ProfileFollowAPIView(APIView):
+#     permission_classes = (IsAuthenticated,)
+#     renderer_classes = (ProfileJSONRenderer,)
+#     serializer_class = ProfileSerializer
 
-    def delete(self, request, username=None):
-        follower = self.request.user.profile
+#     def delete(self, request, username=None):
+#         follower = self.request.user.profile
 
-        try:
-            followee = Profile.objects.get(user__username=username)
-        except Profile.DoesNotExist:
-            raise NotFound('A profile with this username was not found.')
+#         try:
+#             followee = Profile.objects.get(user__username=username)
+#         except Profile.DoesNotExist:
+#             raise NotFound('A profile with this username was not found.')
 
-        follower.unfollow(followee)
+#         follower.unfollow(followee)
 
-        serializer = self.serializer_class(followee, context={
-            'request': request
-        })
+#         serializer = self.serializer_class(followee, context={
+#             'request': request
+#         })
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, username=None):
-        follower = self.request.user.profile
+#     def post(self, request, username=None):
+#         follower = self.request.user.profile
 
-        try:
-            followee = Profile.objects.get(user__username=username)
-        except Profile.DoesNotExist:
-            raise NotFound('A profile with this username was not found.')
+#         try:
+#             followee = Profile.objects.get(user__username=username)
+#         except Profile.DoesNotExist:
+#             raise NotFound('A profile with this username was not found.')
 
-        if follower.pk is followee.pk:
-            raise serializers.ValidationError('You can not follow yourself.')
+#         if follower.pk is followee.pk:
+#             raise serializers.ValidationError('You can not follow yourself.')
 
-        follower.follow(followee)
+#         follower.follow(followee)
 
-        serializer = self.serializer_class(followee, context={
-            'request': request
-        })
+#         serializer = self.serializer_class(followee, context={
+#             'request': request
+#         })
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)

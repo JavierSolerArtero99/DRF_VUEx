@@ -1,5 +1,4 @@
-from core.renderers import ConduitJSONRenderer
-
+from ..core.renderers import ConduitJSONRenderer
 
 class UserJSONRenderer(ConduitJSONRenderer):
     charset = 'utf-8'

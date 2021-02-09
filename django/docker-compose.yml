@@ -4,6 +4,8 @@ services:
   web:
     build: ./app
     command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py makemigrate
+    # command: python manage.py makemigrations
     volumes:
       - ./app/:/usr/src/app/
     ports:
