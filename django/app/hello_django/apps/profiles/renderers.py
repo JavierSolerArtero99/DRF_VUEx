@@ -1,4 +1,4 @@
-from core.renderers import ConduitJSONRenderer
+from ..core.renderers import ConduitJSONRenderer
 
 
 class ProfileJSONRenderer(ConduitJSONRenderer):

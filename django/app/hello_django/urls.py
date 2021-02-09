@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^api/', include('hello_django.apps.products.urls')),
 
     url(r'^api/', include('hello_django.apps.authentication.urls')),
-    # url(r'^api/', include('hello_django.apps.profiles.urls', namespace='profiles')),
+    url(r'^api/', include('hello_django.apps.profiles.urls')),
 ]
