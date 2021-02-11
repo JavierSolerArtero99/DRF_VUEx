@@ -12,17 +12,28 @@ module.exports = {
   resolve: {
     extensions: [".js", ".ts", ".vue"],
     alias: {
-      vue: "vue/dist/vue.runtime.esm.js",
-    },
+      vue: "vue/dist/vue.runtime.esm.js"
+    }
   },
   mode: "development",
   entry: {
     app: "./main.ts",
-    vendor: ["vue"],
+    vendor: ["vue"]
   },
   output: {
     path: path.join(basePath, "dist"),
-    filename: "[name].js",
+    filename: "[name].js"
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    port: 8080,
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        secure: false
+      }
+    }
   },
   optimization: {
     splitChunks: {
@@ -31,17 +42,17 @@ module.exports = {
           test: /node_modules/,
           name: "vendor",
           chunks: "initial",
-          enforce: true,
-        },
-      },
-    },
+          enforce: true
+        }
+      }
+    }
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
         exclude: /node_modules/,
-        loader: "vue-loader",
+        loader: "vue-loader"
       },
       {
         test: /\.ts$/,
@@ -50,47 +61,52 @@ module.exports = {
           loader: "ts-loader",
           options: {
             appendTsSuffixTo: [/\.vue$/],
-            transpileOnly: true,
-          },
-        },
+            transpileOnly: true
+          }
+        }
       },
       {
         test: /\.css$/,
-        use: [process.env.NODE_ENV !== "production" ? "vue-style-loader" : MiniCssExtractPlugin.loader, "css-loader"],
+        use: [
+          process.env.NODE_ENV !== "production"
+            ? "vue-style-loader"
+            : MiniCssExtractPlugin.loader,
+          "css-loader"
+        ]
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff",
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?limit=10000&mimetype=application/octet-stream",
+        loader: "url-loader?limit=10000&mimetype=application/octet-stream"
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file-loader",
+        loader: "file-loader"
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?limit=10000&mimetype=image/svg+xml",
-      },
-    ],
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml"
+      }
+    ]
   },
   devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "index.html",
-      hash: true,
+      hash: true
     }),
     new webpack.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: "[name].css"
     }),
     new ForkTsCheckerWebpackPlugin({
       tsconfig: path.join(basePath, "./tsconfig.json"),
-      vue: true,
+      vue: true
     }),
-    new VueLoaderPlugin(),
-  ],
+    new VueLoaderPlugin()
+  ]
 };
