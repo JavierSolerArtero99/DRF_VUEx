@@ -19,15 +19,22 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes: [
     { path: '/', component: App, redirect: '/app' },
-    { path: '/app', component: Home, 
+    {
+      path: '/app', component: Home,
       children: [
         { path: 'products', component: Products },
         { path: 'about', component: Products },
-        { path: 'profile', component: Profile },
+        {
+          path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
+            if (store.getters.currentUser.isAuthed) {
+              next();
+            } else next({ path: '/' });
+          }
+        },
       ]
     },
     { path: '/login', component: Login },
-    // { path: '/app/*', component: NotFound }
+    { path: '/app/*', component: NotFound }
   ]
 });
 

@@ -6,7 +6,7 @@
 
       <cite>Lorem ipsum dolor sit amet consectete perferendis libero optio eiustam saepe quas?</cite>
 
-      
+
     </div>
   </div>
 </template>

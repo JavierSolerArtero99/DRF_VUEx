@@ -26,6 +26,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       email: payload.email,
       image: payload.image,
       bio: payload.bio,
+      isAuthed: true
     }
   },
   purgeCurrentUser(state) {
@@ -35,6 +36,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       email: "",
       image: "",
       bio: "",
+      isAuthed: false
     }
   },
 };

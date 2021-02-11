@@ -25,7 +25,8 @@ const actions: DefineActionTree<RootActions, RootState> = {
       username: payload.username,
       email: "jasoka@gmail.com",
       bio: "mi bio",
-      image: "none"
+      image: "none",
+      isAuthed: true
     };
 
     commit(rootMutationsTypes.setCurrentUser({ ...payload, ...user}));
