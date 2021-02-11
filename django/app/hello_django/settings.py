@@ -38,8 +38,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "hello_django.apps.core", 
     "hello_django.apps.products",
+    "hello_django.apps.authentication",
+    "hello_django.apps.profiles",
 ]
+
+AUTH_USER_MODEL = "authentication.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,6 +124,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    '0.0.0.0:8080',
+    'localhost:8080',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
