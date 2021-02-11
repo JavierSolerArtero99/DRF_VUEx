@@ -24,13 +24,14 @@ const router = new VueRouter({
       children: [
         { path: 'products', component: Products },
         { path: 'about', component: Products },
-        {
-          path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
-            if (store.getters.currentUser.isAuthed) {
-              next();
-            } else next({ path: '/' });
-          }
-        },
+        // {
+        //   path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
+        //     if (store.getters.currentUser.isAuthed) {
+        //       next();
+        //     } else next({ path: '/' });
+        //   }
+        // },
+        { path: 'profile', component: Profile }
       ]
     },
     { path: '/login', component: Login },

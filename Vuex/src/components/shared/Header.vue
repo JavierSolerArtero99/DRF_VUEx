@@ -13,8 +13,16 @@
     </div>
 
     <div class="container--buttons">
-      <button v-if="data.currentUser.username" class="button button-profile">
-        <router-link to="/app/profile">{{ data.currentUser.username }}</router-link>
+      <button
+        v-if="data.currentUser.isAuthed"
+        @click="
+          () => {
+            $router.push({ path: '/app/profile' });
+          }
+        "
+        class="button button-profile"
+      >
+        {{ data.currentUser.username }}
       </button>
       <button @click="handleAuth" class="button button-login">
         {{ data.currentUser.username ? "Logout" : "Login" }}
@@ -38,7 +46,7 @@ export default class Header extends Vue {
   };
 
   handleAuth() {
-    if (this.data.currentUser.username) {
+    if (this.data.currentUser.isAuthed) {
       store
         .dispatch(storeTypes.root.actions.purgeAuth())
         .then((res) => this.$router.push({ path: "/login" }));
@@ -58,7 +66,6 @@ export default class Header extends Vue {
   top: 0;
 
   background-color: #222222;
-  /* background:linear-gradient(90deg, #ee0979 0%,#ff6a00 100% ); */
 
   border-bottom: 2px #202020 solid;
 
