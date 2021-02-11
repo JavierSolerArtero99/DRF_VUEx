@@ -3,10 +3,17 @@
     <div class="container">
       <div class="header">
         <img
+          @click="
+            () => {
+              $router.push({ path: '/app/profile-edit' })
+            }"
+
+          class="picture"
           src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true"
-          alt="logo"
+          alt="profile picture"
         />
-        <span>Javier Soler Cantó</span>
+        <span class="username">Jasoka</span>
+        <span class="email">jasoka@gmail.com</span>
 
         <cite
           >Lorem ipsum dolor sit amet consectete perferendis libero optio
@@ -16,10 +23,19 @@
 
       <div class="dashboard">
         <div class="dashboard-card">
-          <img src="" alt="">
+          <img
+            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/fire.png?raw=true"
+            alt="uploads"
+          />
           <span>1</span>
         </div>
-        <div class="dashboard-card"></div>
+        <div class="dashboard-card">
+          <img
+            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/upload.png?raw=true"
+            alt="karma"
+          />
+          <span>1</span>
+        </div>
       </div>
     </div>
   </div>
@@ -83,10 +99,6 @@ export default class Profile extends Vue {
   justify-content: center;
 }
 
-.header span {
-  margin-top: 1rem;
-}
-
 .header cite {
   margin-top: 0.5rem;
 }
@@ -107,12 +119,44 @@ export default class Profile extends Vue {
   width: 45%;
   height: 70%;
 
-  background-color: cadetblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-img {
+.dashboard-card img {
+  width: 80px;
+  height: 80px;
+}
+
+.dashboard-card span {
+  font-size: 3rem;
+  margin-left: 3rem;
+}
+
+.username {
+  margin-top: 1rem;
+}
+
+.email {
+  font-size: 0.8rem;
+}
+
+.picture {
   width: 150px;
   height: 150px;
+}
+
+.picture:hover {
+  content: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/edit.png?raw=true");
+  cursor: pointer;
+
+  width: 140px;
+  height: 140px;
+
+  margin: 1rem;
+
+  transition: 1s all;
 }
 
 cite {

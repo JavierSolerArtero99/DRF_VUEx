@@ -16,3 +16,4 @@ export { default as Login } from "./login/Login.vue";
 
 // PROFILE
 export { default as Profile } from "./profile/Profile.vue";
+export { default as EditProfile } from "./profile/EditProfile.vue";

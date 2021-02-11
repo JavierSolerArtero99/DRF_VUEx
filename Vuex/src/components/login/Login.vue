@@ -35,6 +35,7 @@
               v-model="data.password"
               type="password"
               name="password"
+              required
             />
           </div>
         </div>

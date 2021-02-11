@@ -18,8 +18,8 @@
         @click="
           () => {
             $router.push({ path: '/app/profile' });
-          }
-        "
+          }"
+          
         class="button button-profile"
       >
         {{ data.currentUser.username }}

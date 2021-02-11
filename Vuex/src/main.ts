@@ -4,7 +4,7 @@ import App from "./App.vue";
 import store from "./store";
 import { vuetify } from "./core/plugins";
 import { currency } from "./core/filters";
-import { Header, NotFound, Home, Login, Products, Profile } from "./components";
+import { Header, NotFound, Home, Login, Products, Profile, EditProfile } from "./components";
 import ApiService from "./common/api.service";
 
 Vue.use(VueRouter);
@@ -31,7 +31,8 @@ const router = new VueRouter({
         //     } else next({ path: '/' });
         //   }
         // },
-        { path: 'profile', component: Profile }
+        { path: 'profile', component: Profile },
+        { path: 'profile-edit', component: EditProfile }
       ]
     },
     { path: '/login', component: Login },
