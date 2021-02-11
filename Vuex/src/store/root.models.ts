@@ -1,10 +1,17 @@
-import { ExtendedCartState } from "./modules/cart";
-import { ExtendedProductsState } from "./modules/products";
 
 /** Root State */
-export interface RootState extends ExtendedCartState, ExtendedProductsState {
+export interface RootState {
   loading: boolean;
+  currentUser: User;
   snackbar: Snackbar;
+}
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  image: string;
+  bio: string;
 }
 
 interface Snackbar {
@@ -14,9 +21,18 @@ interface Snackbar {
 }
 
 export type SetSnackbar = Pick<Snackbar, "message" | "type">;
+export type SetCurrentUser = Pick<User, "id" | "username" | "email" | "bio" | "image">;
+export type SetAuth = { username: string, password: string };
 
 export const initialRootState: RootState = {
   loading: false,
+  currentUser: {
+    id: 0,
+    username: "",
+    email: "",
+    image: "",
+    bio: "",
+  },
   snackbar: {
     message: "",
     isActive: false,
