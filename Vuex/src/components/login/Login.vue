@@ -1,29 +1,140 @@
 <template>
   <div class="login">
-    <form class="login__form">
-      <input type="text" name="username" placeholder="Username">
-      <!-- <input type="email" name="email" placeholder="Email"> -->
-      <input type="password" name="password" placeholder="Password">
+    <div class="container">
+      <img src="https://i.ibb.co/sqdfW3W/vuex.png" alt="logo" />
 
-      <button class="login__button">Login</button>
+      <form @submit="checkForm" class="login__form">
+        <div class="input__container">
+          <div>
+            <label for="username">Username</label>
+            <input
+              class="login__input"
+              id="username"
+              v-model="data.username"
+              type="text"
+              name="username"
+              required
+            />
+          </div>
+          <div v-if="!this.mode">
+            <label for="email">Email</label>
+            <input
+              class="login__input"
+              id="email"
+              v-model="data.email"
+              type="email"
+              name="email"
+              required
+            />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input
+              class="login__input"
+              id="password"
+              v-model="data.password"
+              type="password"
+              name="password"
+            />
+          </div>
+        </div>
 
-      <router-link to="/register">You don't have an account?</router-link>
-    </form>
+        <div v-if="data.errors" class="container-error">
+          <b>Please, check this errors:</b>
+          <p v-for="error in data.errors" v-bind:key="error">{{ error }}</p>
+        </div>
+
+        <button type="submit" class="login__button">
+          {{ this.mode ? "Login" : "Register" }}
+        </button>
+      </form>
+    </div>
+    <button class="router-link" @click="changeMode">
+      {{
+        this.mode ? "You don't have an account?" : "Do you have an account yet?"
+      }}
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import Component from "vue-class-component";
+import store, { storeTypes } from "../../store";
+import { Route } from "vue-router";
 
-export default Vue.extend({
-  name: "Login",
-  components: {
-  },
-  computed: {
-  },
-  mounted() {
-  },
-});
+@Component({
+  name: "login",
+})
+export default class Login extends Vue {
+  data = {
+    errors: undefined,
+    username: "",
+    email: "",
+    password: "",
+  };
+
+  mode: boolean = true;
+
+  changeMode(): void {
+    this.mode = !this.mode;
+  }
+
+  checkForm(e) {
+    this.data.errors = [];
+
+    if (this.mode) {
+      if (!this.handleAuth()) {
+        this.data.errors.push("Invalid username or password");
+        e.preventDefault();
+        // return false;
+      }
+      this.$router.push({ path: "/" });
+    }
+
+    if (
+      this.data.username.length >= 3 &&
+      this.data.username.length <= 15 &&
+      this.data.password.length >= 8 &&
+      this.data.password.length <= 30
+    ) {
+      // this.handleRegister
+      if (!this.handleAuth()) {
+        this.data.errors.push("An error has ocurred during the register");
+        e.preventDefault();
+        return false;
+      }
+      this.$router.push({ path: "/" });
+    }
+
+    if (this.data.username.length < 3 || this.data.username.length > 15)
+      this.data.errors.push("Username must be at least 3 characters.");
+    if (this.data.password.length < 8 || this.data.password.length > 30)
+      this.data.errors.push("Password must be at least 8 characters.");
+
+    e.preventDefault();
+  }
+
+  handleAuth(): boolean {
+    store
+      .dispatch(
+        storeTypes.root.actions!.setAuth({
+          username: this.data.username,
+          password: this.data.password,
+        })
+      )
+      .then(
+        (res) => {
+          return true;
+        },
+        (err) => {
+          return false;
+        }
+      );
+
+    return false;
+  }
+}
 </script>
 
 <style scoped>
@@ -32,36 +143,130 @@ export default Vue.extend({
   width: 100%;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  background-image: url('https://images.unsplash.com/photo-1565638459249-c85cbb2faaa8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
   background-size: cover;
+
+  background-color: #222222;
+}
+
+.container {
+  height: 70%;
+  width: 30%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 0;
+}
+
+.input__container {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.router-link {
+  margin-top: 2rem;
+  color: white;
+}
+
+h1 {
+  background: #5136ff;
+  text-align: center;
+  color: white;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+}
+
+label {
+  color: white;
+  padding-left: 1rem;
+}
+
+.container-error {
+  height: fit-content;
+  width: 250px;
+
+  margin: 1.5rem;
+  padding: 1rem;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  border-radius: 0.3rem;
+
+  line-height: 2rem;
+
+  background-color: #c23834;
+  color: white;
+}
+
+.container-error p {
+  line-height: 1.5rem;
 }
 
 .login__form {
-  height: 60%;
-  width: 60%;
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-rows: 90% 10%;
+}
+
+.login__input {
+  height: 3rem;
+  width: 100%;
+
+  color: white;
+
+  border-bottom: 2px #ffad37 solid;
+
+  padding-left: 1.5rem;
+  padding-right: 1rem;
+
+  font-size: 1.2rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+}
 
-  background-color: #00000090;
-  border-radius: 3vh;
+.login__input:focus {
+  border-bottom: 2px #5136ff solid;
+}
+
+.login__input::placeholder {
+  color: white;
+}
+
+button:focus,
+input:focus {
+  outline: 0;
 }
 
 .login__button {
-  height: 2rem;
-  width: 7rem;
+  background-color: #ffad37;
+  color: white;
 
-  background-color: white;
-  color: black;
-  border-radius: 3vh;
+  font-weight: bold;
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.login__button:hover {
+  background-color: #5136ff;
 }
 </style>

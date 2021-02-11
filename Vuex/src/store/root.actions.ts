@@ -1,9 +1,11 @@
-import { RootState, SetSnackbar } from "./root.models";
+import { RootState, SetSnackbar, SetCurrentUser, SetAuth } from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
 export interface RootActions {
   showSnackbar: SetSnackbar;
+  setAuth: SetAuth;
+  purgeAuth: void;
 }
 
 const actions: DefineActionTree<RootActions, RootState> = {
@@ -14,10 +16,30 @@ const actions: DefineActionTree<RootActions, RootState> = {
       commit(rootMutationsTypes.setSnackbar({ ...payload, isActive: false }));
     }, 3000);
   },
+
+  setAuth({ commit }, { payload }) {
+    console.log(payload);
+    
+    let user: SetCurrentUser = {
+      id: 1,
+      username: payload.username,
+      email: "jasoka@gmail.com",
+      bio: "mi bio",
+      image: "none"
+    };
+
+    commit(rootMutationsTypes.setCurrentUser({ ...payload, ...user}));
+  },
+
+  purgeAuth({ commit }) {
+    commit(rootMutationsTypes.purgeCurrentUser());
+  }
 };
 
 export const rootActionsTypes: DefineTypes<RootActions> = {
   showSnackbar: payload => ({ type: "showSnackbar", payload }),
+  setAuth: payload => ({ type: "setAuth", payload }),
+  purgeAuth: payload => ({ type: "purgeAuth", payload })
 };
 
 export default actions;

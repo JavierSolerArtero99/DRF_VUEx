@@ -1,6 +1,10 @@
 <template>
   <div class="header">
-    <span class="logo"><router-link to="/">Javier Soler &#178;</router-link></span>
+    <span class="logo"
+      ><a target="_blank" href="https://github.com/JavierSolerArtero99/DRF_VUEx"
+        >Javier Soler &#178;</a
+      ></span
+    >
 
     <div class="container--links">
       <router-link to="/">Home</router-link>
@@ -9,21 +13,40 @@
     </div>
 
     <div class="container--buttons">
-      <button class="button  button-login"><router-link to="/login">Login</router-link></button>
-      <button class="button  button-register"><router-link to="/register">Register</router-link></button>
+      <button v-if="data.currentUser.username" class="button button-profile">
+        <router-link to="/profile">{{ data.currentUser.username }}</router-link>
+      </button>
+      <button @click="handleAuth" class="button button-login">
+        {{ data.currentUser.username ? "Logout" : "Login" }}
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import store from "../../store";
+import Component from "vue-class-component";
+import store, { storeTypes } from "../../store";
+import { Route } from "vue-router";
 
-export default Vue.extend({
-  name: "Header",
-  computed: {
+@Component({
+  name: "appHeader",
+})
+export default class Header extends Vue {
+  data = {
+    currentUser: store.getters.currentUser,
+  };
+
+  handleAuth() {
+    if (this.data.currentUser.username) {
+      store
+        .dispatch(storeTypes.root.actions.purgeAuth())
+        .then((res) => this.$router.push({ path: "/login" }));
+    } else {
+      this.$router.push({ path: "/login" });
+    }
   }
-});
+}
 </script>
 
 <style scoped>
@@ -36,7 +59,9 @@ export default Vue.extend({
 
   background-color: #222222;
   /* background:linear-gradient(90deg, #ee0979 0%,#ff6a00 100% ); */
-  
+
+  border-bottom: 2px #202020 solid;
+
   color: white;
   font-size: 2vh;
 
@@ -61,7 +86,7 @@ a:hover {
   text-align: center;
 
   padding: 1vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
   background-color: #5136ff;
 
@@ -80,10 +105,11 @@ a:hover {
 
 .container--links {
   height: 100%;
+  width: 60%;
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .container--links a {
@@ -98,14 +124,15 @@ a:hover {
   padding: 1vh;
 }
 
-.button:focus {outline:0;}
+.button:focus {
+  outline: 0;
+}
 
 .button-login {
   background-color: #ffad37;
 }
 
-.button-register {
+.button-profile {
   background-color: #5136ff;
 }
-
 </style>

@@ -28,8 +28,6 @@ const router = new VueRouter({
   ]
 });
 
-console.log(router)
-
 new Vue({
   router,
   store,
