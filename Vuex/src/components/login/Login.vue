@@ -39,9 +39,9 @@
           </div>
         </div>
 
-        <div v-if="data.errors" class="container-error">
+        <div v-if="errors.length > 0" class="container-error">
           <b>Please, check this errors:</b>
-          <p v-for="error in data.errors" v-bind:key="error">{{ error }}</p>
+          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
         </div>
 
         <button type="submit" class="login__button">
@@ -68,24 +68,34 @@ import { Route } from "vue-router";
 })
 export default class Login extends Vue {
   data = {
-    errors: undefined,
     username: "",
     email: "",
     password: "",
   };
 
+  errors: string[];
   mode: boolean = true;
+  
+  constructor() {
+    super();
+
+    this.errors = [];
+  }
+
+  mounted() {
+    console.log("Mounted Login Component");
+  }
 
   changeMode(): void {
     this.mode = !this.mode;
   }
 
   checkForm(e) {
-    this.data.errors = [];
+    this.errors = [];
 
     if (this.mode) {
       if (!this.handleAuth()) {
-        this.data.errors.push("Invalid username or password");
+        this.errors.push("Invalid username or password");
         e.preventDefault();
         // return false;
       }
@@ -100,7 +110,7 @@ export default class Login extends Vue {
     ) {
       // this.handleRegister
       if (!this.handleAuth()) {
-        this.data.errors.push("An error has ocurred during the register");
+        this.errors.push("An error has ocurred during the register");
         e.preventDefault();
         return false;
       }
@@ -108,9 +118,9 @@ export default class Login extends Vue {
     }
 
     if (this.data.username.length < 3 || this.data.username.length > 15)
-      this.data.errors.push("Username must be at least 3 characters.");
+      this.errors.push("Username must be at least 3 characters.");
     if (this.data.password.length < 8 || this.data.password.length > 30)
-      this.data.errors.push("Password must be at least 8 characters.");
+      this.errors.push("Password must be at least 8 characters.");
 
     e.preventDefault();
   }
@@ -214,6 +224,11 @@ label {
 
 .container-error p {
   line-height: 1.5rem;
+}
+
+.container-error img {
+  width: 30px;
+  height: 30px;
 }
 
 .login__form {

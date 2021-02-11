@@ -14,7 +14,7 @@
 
     <div class="container--buttons">
       <button v-if="data.currentUser.username" class="button button-profile">
-        <router-link to="/profile">{{ data.currentUser.username }}</router-link>
+        <router-link to="/app/profile">{{ data.currentUser.username }}</router-link>
       </button>
       <button @click="handleAuth" class="button button-login">
         {{ data.currentUser.username ? "Logout" : "Login" }}
