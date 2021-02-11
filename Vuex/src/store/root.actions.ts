@@ -2,6 +2,8 @@ import { RootState, SetSnackbar, SetCurrentUser, SetAuth } from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
+import ApiService from "../common/api.service";
+
 export interface RootActions {
   showSnackbar: SetSnackbar;
   setAuth: SetAuth;
@@ -17,18 +19,38 @@ const actions: DefineActionTree<RootActions, RootState> = {
     }, 3000);
   },
 
+  /* AUTHENTICATION */
+
+  // Login
   setAuth({ commit }, { payload }) {
+    console.log("PAYLOAD");
     console.log(payload);
-    
+
     let user: SetCurrentUser = {
       id: 1,
       username: payload.username,
+      password: payload.password,
       email: "jasoka@gmail.com",
       bio: "mi bio",
       image: "none"
     };
 
-    commit(rootMutationsTypes.setCurrentUser({ ...payload, ...user}));
+    ApiService.post("users/login", {user})
+      .then(({ data }) => {
+        console.log("===SUCCESS===");
+        console.log(data);
+      })
+      .catch(err => {
+        console.log("===ERROR===");
+        console.log(err.response);
+      });
+
+    commit(
+      rootMutationsTypes.setCurrentUser({
+        ...payload,
+        ...user
+      })
+    );
   },
 
   purgeAuth({ commit }) {

@@ -61,7 +61,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import store, { storeTypes } from "../../store";
-import { Route } from "vue-router";
 
 @Component({
   name: "login",
@@ -75,7 +74,7 @@ export default class Login extends Vue {
 
   errors: string[];
   mode: boolean = true;
-  
+
   constructor() {
     super();
 
@@ -94,7 +93,8 @@ export default class Login extends Vue {
     this.errors = [];
 
     if (this.mode) {
-      if (!this.handleAuth()) {
+      if (!this.handleAuth(this.data)) {
+        //login
         this.errors.push("Invalid username or password");
         e.preventDefault();
         // return false;
@@ -109,7 +109,7 @@ export default class Login extends Vue {
       this.data.password.length <= 30
     ) {
       // this.handleRegister
-      if (!this.handleAuth()) {
+      if (!this.handleAuth(this.data)) {
         this.errors.push("An error has ocurred during the register");
         e.preventDefault();
         return false;
@@ -125,7 +125,9 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
-  handleAuth(): boolean {
+  handleAuth(user: any): boolean {
+    // LOADING!!!
+
     store
       .dispatch(
         storeTypes.root.actions!.setAuth({

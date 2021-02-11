@@ -1,4 +1,3 @@
-
 /** Root State */
 export interface RootState {
   loading: boolean;
@@ -9,6 +8,7 @@ export interface RootState {
 interface User {
   id: number;
   username: string;
+  password: string;
   email: string;
   image: string;
   bio: string;
@@ -21,21 +21,25 @@ interface Snackbar {
 }
 
 export type SetSnackbar = Pick<Snackbar, "message" | "type">;
-export type SetCurrentUser = Pick<User, "id" | "username" | "email" | "bio" | "image">;
-export type SetAuth = { username: string, password: string };
+export type SetCurrentUser = Pick<
+  User,
+  "id" | "username" | "password" | "email" | "bio" | "image"
+>;
+export type SetAuth = { username: string; password: string };
 
 export const initialRootState: RootState = {
   loading: false,
   currentUser: {
     id: 0,
     username: "",
+    password: "",
     email: "",
     image: "",
-    bio: "",
+    bio: ""
   },
   snackbar: {
     message: "",
     isActive: false,
-    type: undefined,
-  },
+    type: undefined
+  }
 };
