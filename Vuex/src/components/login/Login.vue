@@ -72,7 +72,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
   name: "login",
@@ -104,35 +104,17 @@ export default class Login extends Vue {
   async checkForm(e) {
     this.errors = [];
 
-    // login
+    // Login
     if (this.mode) {
-      let isHandledAuth = await this.handleAuth(this.data);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      
-      // if (isHandledAuth) {
-      //   this.$router.push({ path: "/" });
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      // } else {
-      //   //login
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   this.errors.push("Invalid username or password");
-      //   e.preventDefault();
-      // }
+      if (await !this.handleAuth(this.data)) {
+        this.errors.push("Invalid username or password");
+        e.preventDefault();
+      } else this.$router.push({ path: "/" });
+
+      return;
     }
 
-    // register
+    // Register
     if (
       this.data.username.length >= 3 &&
       this.data.username.length <= 15 &&
@@ -140,8 +122,7 @@ export default class Login extends Vue {
       this.data.password.length <= 30
     ) {
       // this.handleRegister
-      let isHandledAuth = await this.handleAuth(this.data);
-      if (!isHandledAuth) {
+      if (!this.handleAuth(this.data)) {
         this.errors.push("An error has ocurred during the register");
         e.preventDefault();
         return false;
@@ -157,9 +138,8 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
-  handleAuth(user: any): any {
-    // LOADING!!!
-
+  handleAuth(user: SetAuth): any {
+    console.log(user);
     store
       .dispatch(
         storeTypes.root.actions!.setAuth({
@@ -169,10 +149,9 @@ export default class Login extends Vue {
         })
       )
       .then((data) => {
-        console.log(store.getters.currentUser);
-        console.log(store.getters.currentUser.username.length > 0);
+        console.log(data);
 
-        return store.getters.currentUser.username.length > 0;
+        return store.getters.currentUser.isAuthed;
       });
   }
 }

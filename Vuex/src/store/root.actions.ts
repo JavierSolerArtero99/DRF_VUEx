@@ -23,19 +23,11 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
   // Login
   setAuth({ commit }, { payload }) {
-    let user = {
-      username: payload.username,
-      email: payload.email,
-      password: payload.password,
-      bio: "mi bio",
-      image: "none",
-      isAuthed: true
-    };
-
-    ApiService.post("users/login", { user })
+    ApiService.post("users/login", { payload })
       .then(({ data }) => {
         console.log("===SUCCESS LOGGED===");
         console.log(data);
+        data.isAuthed = true;
         commit(rootMutationsTypes.setCurrentUser(data));
       })
       .catch(err => {
@@ -45,8 +37,6 @@ const actions: DefineActionTree<RootActions, RootState> = {
           errors += `${i}: ${err.response.data.user[i]}`;
         }
         console.log(errors);
-
-        commit(rootMutationsTypes.setErrors(errors));
       });
   },
 

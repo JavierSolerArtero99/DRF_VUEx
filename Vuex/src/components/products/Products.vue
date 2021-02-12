@@ -1,7 +1,14 @@
 <template>
   <div class="products">
     <div class="container">
-      ASKSKKaaada
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
+      <ProductPreview />
     </div>
   </div>
 </template>
@@ -12,11 +19,17 @@ import Component from "vue-class-component";
 import store, { storeTypes } from "../../store";
 import { Route } from "vue-router";
 
+import ProductPreview from "../products/ProductPreview.vue";
+
 @Component({
   name: "products",
+  components: {
+    ProductPreview
+  }
 })
 export default class Products extends Vue {
-  data = {};
+  data = {
+  };
 
   constructor() {
     super();
@@ -28,8 +41,10 @@ export default class Products extends Vue {
 
 <style scoped>
 .products {
-  height: 100%;
+  height: 90%;
   width: 100%;
+
+  padding: 0;
 
   display: flex;
   flex-direction: column;
@@ -41,12 +56,16 @@ export default class Products extends Vue {
   height: 100%;
   width: 100%;
 
-  display: flex;
-  flex-direction: column;
+  display: inline-grid;
+  grid-template-columns: repeat( 4, minmax(230px, 1fr));;
+  grid-gap: 3px;
+  justify-items: center;
   align-items: center;
 
-  padding: 0;
+  overflow: hidden;
 
-  color: white;
-  font-size: 1.3rem;
+  padding: 0;
 }
+
+
+</style>

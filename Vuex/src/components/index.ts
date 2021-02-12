@@ -10,6 +10,8 @@ export { default as NotFound } from "./shared/NotFound.vue";
 
 // PRODUCTS
 export { default as Products } from "./products/Products.vue";
+export { default as ProductPreview } from "./products/ProductPreview.vue";
+export { default as ProductDetails } from "./products/ProductDetails.vue";
 
 // LOGIN
 export { default as Login } from "./login/Login.vue";

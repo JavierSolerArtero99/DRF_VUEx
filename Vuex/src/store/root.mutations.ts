@@ -5,7 +5,6 @@ export interface RootMutations {
   setLoading: RootState["loading"];
   setSnackbar: RootState["snackbar"];
   setCurrentUser: RootState["currentUser"];
-  setErrors: RootState["errors"];
   purgeCurrentUser: void;
 }
 
@@ -20,14 +19,10 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       isActive: payload.isActive
     };
   },
-  setErrors(state, { payload }) {
-    state.errors = payload
-  },
   setCurrentUser(state, { payload }) {
     state.currentUser = {
       id: payload.id,
       username: payload.username,
-      password: payload.password,
       email: payload.email,
       image: payload.image,
       bio: payload.bio,
@@ -38,7 +33,6 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
     state.currentUser = {
       id: 0,
       username: "",
-      password: "",
       email: "",
       image: "",
       bio: "",
@@ -51,7 +45,6 @@ export const rootMutationsTypes: DefineTypes<RootMutations> = {
   setLoading: payload => ({ type: "setLoading", payload }),
   setSnackbar: payload => ({ type: "setSnackbar", payload }),
   setCurrentUser: payload => ({ type: "setCurrentUser", payload }),
-  setErrors: payload => ({ type: "setErrors", payload }),
   purgeCurrentUser: payload => ({ type: "purgeCurrentUser", payload })
 };
 

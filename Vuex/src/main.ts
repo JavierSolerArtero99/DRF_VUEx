@@ -4,7 +4,7 @@ import App from "./App.vue";
 import store from "./store";
 import { vuetify } from "./core/plugins";
 import { currency } from "./core/filters";
-import { Header, NotFound, Home, Login, Products, Profile, EditProfile } from "./components";
+import { Header, NotFound, Home, Login, Products, Profile, EditProfile, ProductDetails } from "./components";
 import ApiService from "./common/api.service";
 
 Vue.use(VueRouter);
@@ -23,6 +23,7 @@ const router = new VueRouter({
       path: '/app', component: Home,
       children: [
         { path: 'products', component: Products },
+        { path: 'products/:id', name: 'details', component: ProductDetails },
         { path: 'about', component: Products },
         // {
         //   path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
