@@ -1,27 +1,19 @@
 <template>
-  <div class="login">
+  <div class="editProfile">
     <div class="container">
-      <img src="https://i.ibb.co/sqdfW3W/vuex.png" alt="logo" />
+      <img
+        src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true"
+        alt="profile picture"
+      />
 
-      <form @submit="checkForm" class="login__form">
+      <form @submit="checkForm" class="editProfile__form">
         <div class="input__container">
           <div>
             <label for="username">Username</label>
             <input
-              class="login__input"
+              class="editProfile__input"
               id="username"
               v-model="data.username"
-              type="text"
-              name="username"
-              required
-            />
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input
-              class="login__input"
-              id="email"
-              v-model="data.email"
               type="text"
               name="username"
               required
@@ -30,7 +22,7 @@
           <div v-if="!this.mode">
             <label for="email">Email</label>
             <input
-              class="login__input"
+              class="editProfile__input"
               id="email"
               v-model="data.email"
               type="email"
@@ -41,7 +33,7 @@
           <div>
             <label for="password">Password</label>
             <input
-              class="login__input"
+              class="editProfile__input"
               id="password"
               v-model="data.password"
               type="password"
@@ -56,16 +48,11 @@
           <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
         </div>
 
-        <button type="submit" class="login__button">
-          {{ this.mode ? "Login" : "Register" }}
+        <button type="submit" class="editProfile__button">
+          Update profile
         </button>
       </form>
     </div>
-    <button class="router-link" @click="changeMode">
-      {{
-        this.mode ? "You don't have an account?" : "Do you have an account yet?"
-      }}
-    </button>
   </div>
 </template>
 
@@ -73,19 +60,19 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import store, { storeTypes } from "../../store";
+import { Route } from "vue-router";
 
 @Component({
-  name: "login",
+  name: "editProfile",
 })
-export default class Login extends Vue {
+export default class EditProfile extends Vue {
   data = {
-    username: "",
-    email: "",
+    username: "jasoka",
+    email: "jasoka@gmail.com",
     password: "",
   };
 
   errors: string[];
-  mode: boolean = true;
 
   constructor() {
     super();
@@ -93,46 +80,9 @@ export default class Login extends Vue {
     this.errors = [];
   }
 
-  mounted() {
-    console.log("Mounted Login Component");
-  }
-
-  changeMode(): void {
-    this.mode = !this.mode;
-  }
-
-  async checkForm(e) {
+  checkForm(e) {
     this.errors = [];
 
-    // login
-    if (this.mode) {
-      let isHandledAuth = await this.handleAuth(this.data);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      console.log(isHandledAuth);
-      
-      // if (isHandledAuth) {
-      //   this.$router.push({ path: "/" });
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      //   console.log("LOOOOOOOOOOOOOGGED");
-      // } else {
-      //   //login
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   console.log("NO LOOOOOOOOOOOOOGGED");
-      //   this.errors.push("Invalid username or password");
-      //   e.preventDefault();
-      // }
-    }
-
-    // register
     if (
       this.data.username.length >= 3 &&
       this.data.username.length <= 15 &&
@@ -140,9 +90,8 @@ export default class Login extends Vue {
       this.data.password.length <= 30
     ) {
       // this.handleRegister
-      let isHandledAuth = await this.handleAuth(this.data);
-      if (!isHandledAuth) {
-        this.errors.push("An error has ocurred during the register");
+      if (!this.handleAuth()) {
+        this.errors.push("An error has ocurred during the update");
         e.preventDefault();
         return false;
       }
@@ -157,30 +106,31 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
-  handleAuth(user: any): any {
-    // LOADING!!!
-
+  handleAuth(): boolean {
     store
       .dispatch(
         storeTypes.root.actions!.setAuth({
           username: this.data.username,
-          email: this.data.email,
           password: this.data.password,
         })
       )
-      .then((data) => {
-        console.log(store.getters.currentUser);
-        console.log(store.getters.currentUser.username.length > 0);
+      .then(
+        (res) => {
+          return true;
+        },
+        (err) => {
+          return false;
+        }
+      );
 
-        return store.getters.currentUser.username.length > 0;
-      });
+    return false;
   }
 }
 </script>
 
 <style scoped>
-.login {
-  height: 100%;
+.editProfile {
+  height: 90%;
   width: 100%;
 
   display: flex;
@@ -262,7 +212,7 @@ label {
   height: 30px;
 }
 
-.login__form {
+.editProfile__form {
   width: 100%;
   height: 100%;
 
@@ -270,7 +220,7 @@ label {
   grid-template-rows: 90% 10%;
 }
 
-.login__input {
+.editProfile__input {
   height: 3rem;
   width: 100%;
 
@@ -288,11 +238,11 @@ label {
   justify-content: center;
 }
 
-.login__input:focus {
+.editProfile__input:focus {
   border-bottom: 2px #5136ff solid;
 }
 
-.login__input::placeholder {
+.editProfile__input::placeholder {
   color: white;
 }
 
@@ -301,7 +251,7 @@ input:focus {
   outline: 0;
 }
 
-.login__button {
+.editProfile__button {
   background-color: #ffad37;
   color: white;
 
@@ -312,7 +262,7 @@ input:focus {
   justify-content: center;
 }
 
-.login__button:hover {
+.editProfile__button:hover {
   background-color: #5136ff;
 }
 </style>

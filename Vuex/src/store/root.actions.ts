@@ -26,7 +26,10 @@ const actions: DefineActionTree<RootActions, RootState> = {
     let user = {
       username: payload.username,
       email: payload.email,
-      password: payload.password
+      password: payload.password,
+      bio: "mi bio",
+      image: "none",
+      isAuthed: true
     };
 
     ApiService.post("users/login", { user })
