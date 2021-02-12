@@ -16,6 +16,17 @@
               required
             />
           </div>
+          <div>
+            <label for="email">Email</label>
+            <input
+              class="login__input"
+              id="email"
+              v-model="data.email"
+              type="text"
+              name="username"
+              required
+            />
+          </div>
           <div v-if="!this.mode">
             <label for="email">Email</label>
             <input
@@ -89,19 +100,38 @@ export default class Login extends Vue {
     this.mode = !this.mode;
   }
 
-  checkForm(e) {
+  async checkForm(e) {
     this.errors = [];
 
+    // login
     if (this.mode) {
-      if (!this.handleAuth(this.data)) {
-        //login
-        this.errors.push("Invalid username or password");
-        e.preventDefault();
-        // return false;
-      }
-      this.$router.push({ path: "/" });
+      let isHandledAuth = await this.handleAuth(this.data);
+      console.log(isHandledAuth);
+      console.log(isHandledAuth);
+      console.log(isHandledAuth);
+      console.log(isHandledAuth);
+      
+      // if (isHandledAuth) {
+      //   this.$router.push({ path: "/" });
+      //   console.log("LOOOOOOOOOOOOOGGED");
+      //   console.log("LOOOOOOOOOOOOOGGED");
+      //   console.log("LOOOOOOOOOOOOOGGED");
+      //   console.log("LOOOOOOOOOOOOOGGED");
+      // } else {
+      //   //login
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   console.log("NO LOOOOOOOOOOOOOGGED");
+      //   this.errors.push("Invalid username or password");
+      //   e.preventDefault();
+      // }
     }
 
+    // register
     if (
       this.data.username.length >= 3 &&
       this.data.username.length <= 15 &&
@@ -109,7 +139,8 @@ export default class Login extends Vue {
       this.data.password.length <= 30
     ) {
       // this.handleRegister
-      if (!this.handleAuth(this.data)) {
+      let isHandledAuth = await this.handleAuth(this.data);
+      if (!isHandledAuth) {
         this.errors.push("An error has ocurred during the register");
         e.preventDefault();
         return false;
@@ -125,26 +156,23 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
-  handleAuth(user: any): boolean {
+  handleAuth(user: any): any {
     // LOADING!!!
 
     store
       .dispatch(
         storeTypes.root.actions!.setAuth({
           username: this.data.username,
+          email: this.data.email,
           password: this.data.password,
         })
       )
-      .then(
-        (res) => {
-          return true;
-        },
-        (err) => {
-          return false;
-        }
-      );
+      .then((data) => {
+        console.log(store.getters.currentUser);
+        console.log(store.getters.currentUser.username.length > 0);
 
-    return false;
+        return store.getters.currentUser.username.length > 0;
+      });
   }
 }
 </script>

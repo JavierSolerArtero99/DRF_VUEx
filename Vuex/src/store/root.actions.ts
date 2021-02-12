@@ -23,34 +23,28 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
   // Login
   setAuth({ commit }, { payload }) {
-    console.log("PAYLOAD");
-    console.log(payload);
-
-    let user: SetCurrentUser = {
-      id: 1,
+    let user = {
       username: payload.username,
-      password: payload.password,
-      email: "jasoka@gmail.com",
-      bio: "mi bio",
-      image: "none"
+      email: payload.email,
+      password: payload.password
     };
 
-    ApiService.post("users/login", {user})
+    ApiService.post("users/login", { user })
       .then(({ data }) => {
-        console.log("===SUCCESS===");
+        console.log("===SUCCESS LOGGED===");
         console.log(data);
+        commit(rootMutationsTypes.setCurrentUser(data));
       })
       .catch(err => {
-        console.log("===ERROR===");
-        console.log(err.response);
-      });
+        console.log("===ERROR LOGIN===");
+        let errors = "";
+        for (var i in err.response.data.user) {
+          errors += `${i}: ${err.response.data.user[i]}`;
+        }
+        console.log(errors);
 
-    commit(
-      rootMutationsTypes.setCurrentUser({
-        ...payload,
-        ...user
-      })
-    );
+        commit(rootMutationsTypes.setErrors(errors));
+      });
   },
 
   purgeAuth({ commit }) {
