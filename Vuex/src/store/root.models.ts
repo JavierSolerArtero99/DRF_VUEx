@@ -27,7 +27,13 @@ export type SetCurrentUser = Pick<
   User,
   "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
 >;
-export type SetAuth = { username: string; email: string; password: string };
+export type SetAuth = {
+  username: string;
+  email: string;
+  password: string;
+  changeScreen: any;
+  showErrors: any;
+};
 
 export const initialRootState: RootState = {
   loading: false,
