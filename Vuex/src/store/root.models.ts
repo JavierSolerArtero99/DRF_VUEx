@@ -3,7 +3,7 @@ export interface RootState {
   loading: boolean;
   currentUser: User;
   snackbar: Snackbar;
-  errors: String
+  errors: String;
 }
 
 interface User {
@@ -23,8 +23,11 @@ interface Snackbar {
 }
 
 export type SetSnackbar = Pick<Snackbar, "message" | "type">;
-export type SetCurrentUser = Pick<User, "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed">;
-export type SetAuth = { username: string, password: string };
+export type SetCurrentUser = Pick<
+  User,
+  "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
+>;
+export type SetAuth = { username: string; email: string; password: string };
 
 export const initialRootState: RootState = {
   loading: false,
