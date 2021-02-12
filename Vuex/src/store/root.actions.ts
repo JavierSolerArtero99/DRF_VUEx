@@ -25,18 +25,15 @@ const actions: DefineActionTree<RootActions, RootState> = {
   setAuth({ commit }, { payload }) {
     ApiService.post("users/login", { payload })
       .then(({ data }) => {
-        console.log("===SUCCESS LOGGED===");
-        console.log(data);
-        data.isAuthed = true;
-        commit(rootMutationsTypes.setCurrentUser(data));
+        commit(rootMutationsTypes.setCurrentUser(data.user));
+        payload.changeScreen();
       })
       .catch(err => {
-        console.log("===ERROR LOGIN===");
         let errors = "";
         for (var i in err.response.data.user) {
           errors += `${i}: ${err.response.data.user[i]}`;
         }
-        console.log(errors);
+        payload.showErrors(errors);
       });
   },
 

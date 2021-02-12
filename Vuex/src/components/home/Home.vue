@@ -13,6 +13,7 @@ import Header from "../shared/Header.vue";
 import Footer from "../shared/Footer.vue";
 
 import ApiService from "../../common/api.service";
+import { store } from "../../store";
 
 export default Vue.extend({
   name: "Home",
@@ -22,7 +23,6 @@ export default Vue.extend({
   },
   computed: {},
   mounted() {
-    console.log("Entra a mounted");
     ApiService.get(`products`)
       .then(({ data }) => {
         console.log("===SUCCESS===");
