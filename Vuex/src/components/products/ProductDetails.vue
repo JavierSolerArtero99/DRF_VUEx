@@ -1,58 +1,87 @@
 <template>
-  <div class="product">
+  <div v-if="data.product.id" class="product">
     <div class="container">
-      <div class="image-container">
-        <img v-bind:src="data.product.image" alt="image" />
-      </div>
-      <div class="info-container">
-        <span class="price"
-          >{{ data.product.price }} <span class="price-sufix">€</span></span
-        >
+      <div v-show="!this.commentsView" class="container--product">
+        <div class="image-container">
+          <img v-bind:src="data.product.image" alt="image" />
+        </div>
+        <div class="info-container">
+          <span class="price"
+            >{{ data.product.price }} <span class="price-sufix">€</span></span
+          >
 
-        <h2 class="title">{{ data.product.title }}</h2>
-        <span class="subtitle">{{ data.product.subtitle }}</span>
+          <h2 class="title">{{ data.product.title }}</h2>
+          <span class="subtitle">{{ data.product.subtitle }}</span>
 
-        <p class="description">{{ data.product.description }}</p>
+          <p class="description">{{ data.product.description }}</p>
 
-        <div class="buttons-container">
-          <button class="buy">Buy</button>
-          <button class="icon icon--blue"></button>
-          <button class="icon icon--orange"></button>
+          <div class="buttons-container">
+            <button class="buy">Buy</button>
+            <button
+              v-if="data.product.author.id !== data.currentUser.id"
+              class="icon icon--blue"
+            ></button>
+            <button
+              v-if="data.product.author.id === data.currentUser.id"
+              class="icon icon--red"
+            ></button>
+            <button class="icon icon--orange"></button>
+          </div>
         </div>
       </div>
+      <Comments v-show="this.commentsView" :product="data.product" />
+      <button @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
+        {{ this.commentsView ? 'Hide comments' : 'Show comments' }}
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import store, { storeTypes, Product } from "../../store";
 import { Route } from "vue-router";
+
+import Comments from "../comments/Comments.vue";
 
 @Component({
   name: "productPreview",
+  components : {
+    Comments
+  }
 })
 export default class ProductPreview extends Vue {
-  data = {
-    product: {
-      id: 1,
-      title: "Shirt",
-      subtitle: "Running shirt",
-      description:
-        "An amazing shirt to make sport. An amazing shirt to make sport. An amazing shirt to make sport. An amazing shirt to make sport. An amazing shirt to make sport",
-      price: 19.99,
-      image:
-        "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
-    },
-    isLiked: false,
-  };
-
   constructor() {
     super();
   }
+    
+  commentsView: boolean = false;
 
-  mounted() {}
+  data = {
+    product: {} as Product,
+    currentUser: store.getters.currentUser,
+  };
+
+  mounted() {
+    this.data.product = {
+      id: parseInt(this.$route.params.id),
+      title: "Shirt",
+      subtitle: "Running shirt",
+      price: 19.99,
+      description: "An amazing shirt to go running every day and get fit",
+      image:
+        "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
+      author: {
+        id: 0,
+        username: "jasoka",
+        email: "jasoka@gmail.com",
+        password: "",
+        image: "",
+        bio: "",
+        isAuthed: true,
+      },
+    };
+  }
 }
 </script>
 
@@ -71,6 +100,20 @@ export default class ProductPreview extends Vue {
   width: 100%;
 
   display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  color: white;
+
+  padding: 0;
+}
+
+.container--product {
+  height: 70%;
+  width: 100%;
+
+  display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
@@ -78,6 +121,32 @@ export default class ProductPreview extends Vue {
   color: white;
 
   padding: 0;
+}
+
+.button--comments {
+  height: 10%;
+  width: 30%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  background-color: #5136ff;
+
+  color: white;
+  font-weight: bold;
+
+  padding: 0;
+
+  transition: 0.3s all;
+}
+
+.button--comments:hover {
+  background-color: transparent;
+  border: 2px solid #5136ff;
+
+  color: #5136ff;
 }
 
 .info-container {
@@ -195,6 +264,18 @@ export default class ProductPreview extends Vue {
   background-color: #ffad37;
 
   background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/sharegrey.png?raw=true");
+}
+
+.icon--red {
+  border: 2px solid #c23834;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/remove.png?raw=true");
+}
+
+.icon--red:hover {
+  background-color: #c23834;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/removenegative.png?raw=true");
 }
 
 .icon img {

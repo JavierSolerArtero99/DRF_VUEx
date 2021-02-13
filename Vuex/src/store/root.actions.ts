@@ -1,4 +1,4 @@
-import { RootState, SetSnackbar, SetCurrentUser, SetAuth } from "./root.models";
+import { RootState, SetSnackbar, SetCurrentUser, SetAuth, Product } from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
@@ -39,7 +39,7 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
   purgeAuth({ commit }) {
     commit(rootMutationsTypes.purgeCurrentUser());
-  }
+  },
 };
 
 export const rootActionsTypes: DefineTypes<RootActions> = {

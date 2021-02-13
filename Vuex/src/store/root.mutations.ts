@@ -23,6 +23,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
     state.currentUser = {
       id: payload.id,
       username: payload.username,
+      password: "",
       email: payload.email,
       image: payload.image,
       bio: payload.bio,
@@ -33,6 +34,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
     state.currentUser = {
       id: 0,
       username: "",
+      password: "",
       email: "",
       image: "",
       bio: "",

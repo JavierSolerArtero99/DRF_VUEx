@@ -35,6 +35,16 @@ export type SetAuth = {
   showErrors: any;
 };
 
+export type Product = {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: number
+  image: string;
+  author: User;
+};
+
 export const initialRootState: RootState = {
   loading: false,
   currentUser: {

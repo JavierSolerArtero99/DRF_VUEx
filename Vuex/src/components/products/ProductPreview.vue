@@ -4,55 +4,48 @@
       () => {
         $router.push({
           name: 'details',
-          params: { id: data.product.id },
+          params: { id: product.id },
         });
-      }"
+      }
+    "
     class="productPreview"
   >
     <div class="image-container">
-      <img v-bind:src="data.product.image" alt="image" />
+      <img v-bind:src="product.image" alt="image" />
     </div>
     <div class="info-container">
-      <span class="title">{{ data.product.title }}</span>
-      <span class="subtitle">{{ data.product.subtitle }}</span>
-      <span class="price">{{ data.product.price }} €</span>
+      <span class="title">{{ product.title }}</span>
+      <span class="subtitle">{{ product.subtitle }}</span>
+      <span class="price">{{ product.price }} €</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import store, { storeTypes, Product } from "../../store";
 import { Route } from "vue-router";
 
 @Component({
   name: "productPreview",
 })
 export default class ProductPreview extends Vue {
-  data = {
-    product: {
-      id: 1,
-      title: "Shirt",
-      subtitle: "Running shirt",
-      price: 19.99,
-      image:
-        "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
-    },
-  };
 
-  constructor() {
+@Prop({required: true, type: Object as () => Product}) readonly product: Product;
+
+constructor() {
     super();
   }
 
-  mounted() {}
+  mounted() {
+  }
 }
 </script>
 
 <style scoped>
 .productPreview {
-  height: 290px;
-  width: 230px;
+  height: 250px;
+  width: 190px;
 
   overflow: hidden;
 
@@ -92,7 +85,7 @@ export default class ProductPreview extends Vue {
 }
 
 .image-container:hover {
-  height: 290px;
+  height: 250px;
   border-bottom: 3px solid #5136ff;
   cursor: pointer;
 }
