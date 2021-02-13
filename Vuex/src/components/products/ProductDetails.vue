@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <Comments v-show="this.commentsView" :product="data.product" />
+      <Comments v-show="this.commentsView" :productId="data.product.id"/>
       <button @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
         {{ this.commentsView ? 'Hide comments' : 'Show comments' }}
       </button>
@@ -55,7 +55,7 @@ export default class ProductPreview extends Vue {
     super();
   }
     
-  commentsView: boolean = false;
+  commentsView: boolean = true;
 
   data = {
     product: {} as Product,

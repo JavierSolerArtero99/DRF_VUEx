@@ -1,6 +1,6 @@
 export { default as Loader } from "./Loader.vue";
-export { default as Snackbar } from "./Snackbar.vue";
 
+// HOME
 export { default as Home } from "./home/Home.vue";
 
 // SHARED COMPONENTS
@@ -16,6 +16,7 @@ export { default as ProductDetails } from "./products/ProductDetails.vue";
 
 // COMMENTS
 export { default as Comments } from "./comments/Comments.vue";
+export { default as CommentComponent } from "./comments/Comment.vue";
 
 // LOGIN
 export { default as Login } from "./login/Login.vue";

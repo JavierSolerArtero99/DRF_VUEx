@@ -1,22 +1,29 @@
 <template>
-  <div class="comment">
+  <div class="comments">
     <div class="container">
-      eso
+      <CommentComponent v-for="comment in data.comments" v-bind:key="comment.id" :comment="comment" />
+      <div class="comment-box">
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import store, { storeTypes, Product } from "../../store";
+import store, { storeTypes, Product, Comment } from "../../store";
 import { Route } from "vue-router";
+
+import CommentComponent from "../comments/Comment.vue";
 
 @Component({
   name: "comments",
+  components: {
+    CommentComponent
+  }
 })
 export default class Comments extends Vue {
 
-  @Prop({required: true, type: Object as () => Product}) readonly product: Product;
+  @Prop({ required: true, type: Number }) readonly productId: number;
 
   constructor() {
     super();
@@ -24,16 +31,83 @@ export default class Comments extends Vue {
 
   data = {
     currentUser: store.getters.currentUser,
+    comments: [] as Comment[],
   };
 
   mounted() {
+    console.log(this.productId);
+
+    this.data.comments = [
+      {
+        id: 1,
+        body: "This is a comment of a product",
+        author: {
+          id: 0,
+          username: "jasoka",
+          email: "jasoka@gmail.com",
+          password: "",
+          image: "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true",
+          bio: "",
+          isAuthed: true,
+        },
+        product: {
+          id: parseInt(this.$route.params.id),
+          title: "Shirt",
+          subtitle: "Running shirt",
+          price: 19.99,
+          description: "An amazing shirt to go running every day and get fit",
+          image:
+            "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
+          author: {
+            id: 0,
+            username: "jasoka",
+            email: "jasoka@gmail.com",
+            password: "",
+            image: "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true",
+            bio: "",
+            isAuthed: true,
+          },
+        },
+      },
+      {
+        id: 2,
+        body: "This is another comment of a product",
+        author: {
+          id: 1,
+          username: "carlos",
+          email: "carlos@gmail.com",
+          password: "",
+          image: "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true",
+          bio: "",
+          isAuthed: false,
+        },
+        product: {
+          id: parseInt(this.$route.params.id),
+          title: "Shirt",
+          subtitle: "Running shirt",
+          price: 19.99,
+          description: "An amazing shirt to go running every day and get fit",
+          image:
+            "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
+          author: {
+            id: 0,
+            username: "jasoka",
+            email: "jasoka@gmail.com",
+            password: "",
+            image: "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true",
+            bio: "",
+            isAuthed: true,
+          },
+        },
+      },
+    ];
   }
 }
 </script>
 
 <style scoped>
 .comments {
-  height: 90%;
+  height: 70%;
   width: 100%;
 
   overflow: hidden;
@@ -45,14 +119,8 @@ export default class Comments extends Vue {
   height: 100%;
   width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-
-  color: white;
-
-  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 button:focus {

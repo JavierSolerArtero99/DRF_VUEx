@@ -14,7 +14,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import store, { storeTypes, Product } from "../../store";
 import { Route } from "vue-router";
 
 import ProductPreview from "./ProductPreview.vue";
@@ -29,7 +29,7 @@ import Pagination from "../shared/Pagination.vue";
 })
 export default class Products extends Vue {
   data = {
-    products: [],
+    products: [] as Product[],
   };
 
   constructor() {
@@ -39,13 +39,22 @@ export default class Products extends Vue {
   mounted() {
     for (let i = 0; i < 10; i++) {
       this.data.products.push({
-        id: i+1,
+        id: i + 1,
         title: "Shirt",
         subtitle: "Running shirt",
         price: 19.99,
         description: "An amazing shirt to go running every day and get fit",
         image:
           "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
+        author: {
+          id: 0,
+          username: "jasoka",
+          email: "jasoka@gmail.com",
+          password: "",
+          image: "",
+          bio: "",
+          isAuthed: true,
+        },
       });
     }
   }

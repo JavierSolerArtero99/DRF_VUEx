@@ -18,8 +18,8 @@
         @click="
           () => {
             $router.push({ path: '/app/profile' });
-          }"
-          
+          }
+        "
         class="button button-profile"
       >
         {{ data.currentUser.username }}
@@ -48,7 +48,7 @@ export default class Header extends Vue {
   handleAuth() {
     if (this.data.currentUser.isAuthed) {
       store
-        .dispatch(storeTypes.root.actions.purgeAuth())
+        .dispatch(storeTypes.root.actions!.purgeAuth())
         .then((res) => this.$router.push({ path: "/login" }));
     } else {
       this.$router.push({ path: "/login" });
