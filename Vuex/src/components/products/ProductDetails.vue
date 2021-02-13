@@ -5,7 +5,9 @@
         <img v-bind:src="data.product.image" alt="image" />
       </div>
       <div class="info-container">
-        <span class="price">{{ data.product.price }} <span class="price-sufix">€</span></span>
+        <span class="price"
+          >{{ data.product.price }} <span class="price-sufix">€</span></span
+        >
 
         <h2 class="title">{{ data.product.title }}</h2>
         <span class="subtitle">{{ data.product.subtitle }}</span>
@@ -13,12 +15,9 @@
         <p class="description">{{ data.product.description }}</p>
 
         <div class="buttons-container">
-          <button class="buy">
-            <img src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shopping-cartorange.png?raw=true" alt="cart">
-            <span>Buy</span>
-          </button>
-          <button class="fav">Fav</button>
-          <button class="share">Share</button>
+          <button class="buy">Buy</button>
+          <button class="icon icon--blue"></button>
+          <button class="icon icon--orange"></button>
         </div>
       </div>
     </div>
@@ -46,6 +45,7 @@ export default class ProductPreview extends Vue {
       image:
         "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
     },
+    isLiked: false,
   };
 
   constructor() {
@@ -107,11 +107,11 @@ export default class ProductPreview extends Vue {
   width: 100%;
   font-size: 2.2rem;
   font-weight: bold;
-  color: #ffad37
+  color: #ffad37;
 }
 
 .price-sufix {
-  color: #ffad37
+  color: #ffad37;
 }
 
 .description {
@@ -145,10 +145,59 @@ export default class ProductPreview extends Vue {
   align-items: center;
 
   background-color: #ffad37;
-  /* border: 2px solid #ffad37 */
+
+  transition: 0.3s all;
 }
 
-.buy img {
+.buy:hover {
+  background-color: transparent;
+  border: 2px solid #ffad37;
+  color: #ffad37;
+}
+
+.icon {
+  width: 25%;
+  height: 100%;
+
+  padding: 0.2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-origin: content-box;
+
+  transition: 0.3s all;
+}
+
+.icon--blue {
+  border: 2px solid #5136ff;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/heartoutline.png?raw=true");
+}
+
+.icon--blue:hover {
+  background-color: #5136ff;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/heartgrey.png?raw=true");
+}
+
+.icon--orange {
+  border: 2px solid #ffad37;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shareorange.png?raw=true");
+}
+
+.icon--orange:hover {
+  background-color: #ffad37;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/sharegrey.png?raw=true");
+}
+
+.icon img {
   max-height: 80%;
   max-width: 80%;
 }
@@ -156,20 +205,6 @@ export default class ProductPreview extends Vue {
 .buy span {
   color: white;
   margin-left: 1rem;
-}
-
-.fav {
-  width: 25%;
-  height: 100%;
-
-  background-color: #5136ff;
-}
-
-.share {
-  width: 25%;
-  height: 100%;
-
-  background-color: #ffad37;
 }
 
 .image-container {
@@ -186,5 +221,9 @@ export default class ProductPreview extends Vue {
 .image-container img {
   max-width: 50%;
   max-height: 50%;
+}
+
+button:focus {
+  outline: none;
 }
 </style>
