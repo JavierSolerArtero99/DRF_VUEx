@@ -2,7 +2,6 @@
 export interface RootState {
   loading: boolean;
   currentUser: User;
-  snackbar: Snackbar;
   errors: String;
 }
 
@@ -16,13 +15,6 @@ interface User {
   isAuthed: boolean;
 }
 
-interface Snackbar {
-  message: string;
-  isActive: boolean;
-  type?: "success" | "info" | "error";
-}
-
-export type SetSnackbar = Pick<Snackbar, "message" | "type">;
 export type SetCurrentUser = Pick<
   User,
   "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
@@ -34,6 +26,23 @@ export type SetAuth = {
   changeScreen: any;
   showErrors: any;
 };
+
+export type Product = {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: number
+  image: string;
+  author: User;
+};
+
+export type Comment = {
+  id: number;
+  body: string;
+  author: User,
+  product: Product;
+}
 
 export const initialRootState: RootState = {
   loading: false,
@@ -47,9 +56,4 @@ export const initialRootState: RootState = {
     isAuthed: false
   },
   errors: "",
-  snackbar: {
-    message: "",
-    isActive: false,
-    type: undefined
-  }
 };

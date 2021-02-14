@@ -8,11 +8,11 @@
 import Vue from "vue";
 import store, { storeTypes } from "./store";
 import { RootState } from "./store/root.models";
-import { Loader, Snackbar, Header, Footer } from "./components";
+import { Loader, Header, Footer } from "./components";
 
 export default Vue.extend({
   name: "App",
-  components: { Loader, Snackbar, Header, Footer },
+  components: { Loader, Header, Footer },
   created() {
     this.reloadProducts();
   },

@@ -107,22 +107,6 @@ export default class EditProfile extends Vue {
   }
 
   handleAuth(): boolean {
-    store
-      .dispatch(
-        storeTypes.root.actions!.setAuth({
-          username: this.data.username,
-          password: this.data.password,
-        })
-      )
-      .then(
-        (res) => {
-          return true;
-        },
-        (err) => {
-          return false;
-        }
-      );
-
     return false;
   }
 }

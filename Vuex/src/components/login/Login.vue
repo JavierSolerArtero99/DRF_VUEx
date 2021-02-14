@@ -106,11 +106,11 @@ export default class Login extends Vue {
         username: this.data.username,
         email: this.data.email,
         password: this.data.password,
-      };
+      } as SetAuth;
       this.handleAuth(user);
     }
 
-    // register
+    // Register
     if (
       this.data.username.length >= 3 &&
       this.data.username.length <= 15 &&
