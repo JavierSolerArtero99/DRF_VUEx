@@ -3,6 +3,7 @@ import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
 import ApiService from "../common/api.service";
+import { destroyToken, saveToken } from "../common/jwt.service";
 
 export interface RootActions {
   showSnackbar: SetSnackbar;
@@ -34,6 +35,7 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
     ApiService.post("users/login", { user })
       .then(({ data }) => {
+        saveToken(data.user.token);
         commit(rootMutationsTypes.setCurrentUser(data.user));
         payload.changeScreen();
       })
@@ -47,6 +49,7 @@ const actions: DefineActionTree<RootActions, RootState> = {
   },
 
   purgeAuth({ commit }) {
+    destroyToken();
     commit(rootMutationsTypes.purgeCurrentUser());
   }
 };

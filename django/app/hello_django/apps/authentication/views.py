@@ -26,9 +26,6 @@ class RegistrationAPIView(APIView):
     renderer_classes = (UserJSONRenderer,)
     serializer_class = RegistrationSerializer
 
-
-    print("HOLA REGISTRARSE")
-
     def post(self, request):
         user = request.data.get('user', {})
         # The create serializer, validate serializer, save serializer pattern
@@ -58,7 +55,6 @@ class LoginAPIView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
@@ -68,6 +64,12 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         # There is nothing to validate or save here. Instead, we just want the
         # serializer to handle turning our `User` object into something that
         # can be JSONified and sent to the client.
+        print("trying to auth user")
+        print("trying to auth user")
+        print("trying to auth user")
+        print("trying to auth user")
+        print("trying to auth user")
+        print("trying to auth user")
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

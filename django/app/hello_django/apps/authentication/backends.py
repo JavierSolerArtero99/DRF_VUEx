@@ -6,7 +6,6 @@ from rest_framework import authentication, exceptions
 
 from .models import User
 
-
 class JWTAuthentication(authentication.BaseAuthentication):
     authentication_header_prefix = 'Token'
 

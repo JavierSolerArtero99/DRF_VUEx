@@ -14,6 +14,7 @@ import Footer from "../shared/Footer.vue";
 
 import ApiService from "../../common/api.service";
 import { store } from "../../store";
+import { destroyToken, getToken } from "../../common/jwt.service";
 
 export default Vue.extend({
   name: "Home",
@@ -23,15 +24,20 @@ export default Vue.extend({
   },
   computed: {},
   mounted() {
-    ApiService.get(`products`)
-      .then(({ data }) => {
-        console.log("===SUCCESS===");
+    if (getToken()) {
+      console.log("There is TOKEN");
+      console.log(getToken());  
+      ApiService.setHeader()    
+      ApiService.get("user").then(data => {
+        console.log("THERE IS USER");
         console.log(data);
-      })
-      .catch((err) => {
-        console.log("===ERROR===");
+      }).catch(err => {
+        console.log("ERROR");
         console.log(err);
-      });
+      })
+    } else {
+      console.log("There is NOOOOO TOKEN");
+    }
   },
 });
 </script>
