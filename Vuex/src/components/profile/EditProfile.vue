@@ -19,7 +19,7 @@
               required
             />
           </div>
-          <div v-if="!this.mode">
+          <div>
             <label for="email">Email</label>
             <input
               class="editProfile__input"

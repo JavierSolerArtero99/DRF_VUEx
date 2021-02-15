@@ -4,10 +4,10 @@
       <img src="https://i.ibb.co/sqdfW3W/vuex.png" alt="logo" />
       <form @submit="checkForm" class="login__form">
         <div class="input__container">
-          <div>
+          <div v-if="!this.mode">
             <label for="username">Username</label>
             <input
-              @click="cleanErrors"
+              @click="clearErrors"
               class="login__input"
               id="username"
               v-model="data.username"
@@ -22,7 +22,7 @@
               class="login__input"
               id="email"
               v-model="data.email"
-              type="text"
+              type="email"
               name="username"
               required
             />
@@ -98,6 +98,8 @@ export default class Login extends Vue {
    * Control de errores en el formulario de usuario
    */
   checkForm(e) {
+    e.preventDefault();
+    this.clearErrors(e);
     // login
     if (this.mode) {
       let user = {
@@ -106,6 +108,7 @@ export default class Login extends Vue {
         password: this.data.password,
       } as SetAuth;
       this.handleAuth(user);
+      return;
     }
 
     // Register
@@ -122,6 +125,7 @@ export default class Login extends Vue {
         password: this.data.password,
       } as SetAuth;
       this.handleAuth(user);
+      return;
     }
 
     if (this.data.username.length < 3 || this.data.username.length > 15)
@@ -129,13 +133,12 @@ export default class Login extends Vue {
     if (this.data.password.length < 8 || this.data.password.length > 30)
       this.errors.push("Password must be at least 8 characters.");
 
-    e.preventDefault();
   }
 
   /**
    * Cleaning errors when introduce new credentials
    */
-  cleanErrors(e) {
+  clearErrors(e) {
     this.errors = [];
   }
 

@@ -9,7 +9,6 @@
           <span class="price"
             >{{ data.product.price }} <span class="price-sufix">€</span></span
           >
-
           <h2 class="title">{{ data.product.title }}</h2>
           <span class="subtitle">{{ data.product.subtitle }}</span>
 
@@ -25,12 +24,20 @@
               v-if="data.product.author.id === data.currentUser.id"
               class="icon icon--red"
             ></button>
-            <button class="icon icon--orange"></button>
+            <button
+              v-if="data.product.author.id !== data.currentUser.id"
+              class="icon icon--orange"
+            ></button>
+            <button
+              v-if="data.product.author.id === data.currentUser.id"
+              class="icon icon--edit"
+              @click="() => $router.push({ path: '/app/editor/1' })"
+            ></button>
           </div>
         </div>
       </div>
       <Comments v-show="this.commentsView" :productId="data.product.id"/>
-      <button @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
+      <button :disabled="isEditionMode" @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
         {{ this.commentsView ? 'Hide comments' : 'Show comments' }}
       </button>
     </div>
@@ -55,7 +62,8 @@ export default class ProductPreview extends Vue {
     super();
   }
     
-  commentsView: boolean = true;
+  commentsView: boolean = false;
+  isEditionMode: boolean = false;
 
   data = {
     product: {} as Product,
@@ -147,6 +155,16 @@ export default class ProductPreview extends Vue {
   border: 2px solid #5136ff;
 
   color: #5136ff;
+}
+
+.button--comments:disabled {
+  opacity: 0.5;
+}
+
+.button--comments:disabled:hover {
+  opacity: 0.5;
+  background-color: #5136ff;
+  color: white;
 }
 
 .info-container {
@@ -276,6 +294,25 @@ export default class ProductPreview extends Vue {
   background-color: #c23834;
 
   background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/removenegative.png?raw=true");
+}
+
+.icon--red:disabled, .icon--red:disabled:hover {
+  opacity: 0.5;
+  border: 2px solid #c23834;
+  background-color: transparent;
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/remove.png?raw=true");
+}
+
+.icon--edit {
+  border: 2px solid #5136ff;
+  
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/edit.png?raw=true");
+}
+
+.icon--edit:hover {
+  background-color: #5136ff;
+
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/editgrey.png?raw=true");
 }
 
 .icon img {
