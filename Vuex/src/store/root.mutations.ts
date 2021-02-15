@@ -2,13 +2,13 @@ import { initialRootState, RootState } from "./root.models";
 import { DefineMutationTree, DefineTypes } from "./store.helpers";
 
 export interface RootMutations {
-  setLoading: RootState["loading"];
+  changeLoading: RootState["loading"];
   setCurrentUser: RootState["currentUser"];
   purgeCurrentUser: void;
 }
 
 const mutations: DefineMutationTree<RootMutations, RootState> = {
-  setLoading(state, { payload }) {
+  changeLoading(state, { payload }) {
     state.loading = payload;
   },
   setCurrentUser(state, { payload }) {
@@ -36,7 +36,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
 };
 
 export const rootMutationsTypes: DefineTypes<RootMutations> = {
-  setLoading: payload => ({ type: "setLoading", payload }),
+  changeLoading: payload => ({ type: "changeLoading", payload }),
   setCurrentUser: payload => ({ type: "setCurrentUser", payload }),
   purgeCurrentUser: payload => ({ type: "purgeCurrentUser", payload })
 };

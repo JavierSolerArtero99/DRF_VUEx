@@ -85,7 +85,7 @@ export default class Login extends Vue {
     this.errors = [];
   }
 
-  /* Template Handlers */
+  /* HANDLERS */
 
   /**
    * Cambia el metodo para hacer login / registro
@@ -134,17 +134,14 @@ export default class Login extends Vue {
 
   /**
    * Cleaning errors when introduce new credentials
-  */
+   */
   cleanErrors(e) {
     this.errors = [];
   }
-  
 
   /* AUTHENTICATION */
 
   handleAuth(user: SetAuth) {
-    // LOADING ACTION
-
     store.dispatch(
       storeTypes.root.actions!.setAuth({
         username: user.username,

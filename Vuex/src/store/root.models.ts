@@ -19,6 +19,10 @@ export type SetCurrentUser = Pick<
   User,
   "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
 >;
+export type Loading = {
+  loading: boolean
+};
+
 export type SetAuth = {
   username: string;
   email: string;

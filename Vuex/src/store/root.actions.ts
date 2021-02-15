@@ -3,7 +3,8 @@ import {
   SetCurrentUser,
   SetAuth,
   Product,
-  HomeLogin
+  HomeLogin,
+  Loading
 } from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
@@ -12,16 +13,33 @@ import ApiService from "../common/api.service";
 import { destroyToken, saveToken } from "../common/jwt.service";
 
 export interface RootActions {
+  setLoading: Loading;
+  quitLoading: Loading;
   setAuth: SetAuth;
   homeLogin: HomeLogin;
   purgeAuth: void;
 }
 
 const actions: DefineActionTree<RootActions, RootState> = {
+  /* LOADING */
+
+  // Loading = TRUE
+  setLoading({ commit }, { payload }) {
+    commit(rootMutationsTypes.changeLoading(false));
+  },
+
+  // Loading = FALSE
+  quitLoading({ commit }, { payload }) {
+    commit(rootMutationsTypes.changeLoading(false));
+  },
+
   /* AUTHENTICATION */
 
   // Authenticaiton
   setAuth({ commit }, { payload }) {
+    // set the loading state to TRUE
+    commit(rootMutationsTypes.changeLoading(true));
+
     if (payload.isLogin) {
       // Login
       ApiService.post("users/login", { user: payload })
@@ -36,6 +54,9 @@ const actions: DefineActionTree<RootActions, RootState> = {
             errors += `${i}: ${err.response.data.user[i]}`;
           }
           payload.showErrors(errors);
+        })
+        .finally(() => {
+          commit(rootMutationsTypes.changeLoading(false));
         });
     } else {
       // Register
@@ -51,6 +72,9 @@ const actions: DefineActionTree<RootActions, RootState> = {
             errors += `${i}: ${err.response.data.user[i]}`;
           }
           payload.showErrors(errors);
+        })
+        .finally(() => {
+          commit(rootMutationsTypes.changeLoading(true));
         });
     }
   },
@@ -77,6 +101,8 @@ const actions: DefineActionTree<RootActions, RootState> = {
 };
 
 export const rootActionsTypes: DefineTypes<RootActions> = {
+  setLoading: payload => ({ type: "setLoading", payload }),
+  quitLoading: payload => ({ type: "quitLoading", payload }),
   setAuth: payload => ({ type: "setAuth", payload }),
   purgeAuth: payload => ({ type: "purgeAuth", payload }),
   homeLogin: payload => ({ type: "homeLogin", payload })
