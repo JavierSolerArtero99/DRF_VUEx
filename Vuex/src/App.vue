@@ -12,7 +12,7 @@ import { Loader, Header, Footer } from "./components";
 
 export default Vue.extend({
   name: "App",
-  components: { Loader, Header, Footer },
+  components: { Loader , Header, Footer },
   created() {
     this.reloadProducts();
   },

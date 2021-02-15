@@ -7,7 +7,10 @@
         </div>
         <p>{{ comment.body }}</p>
       </div>
-      {{ comment.author.username }}
+      <div v-bind:class="data.isOwner && 'actions-container'">
+        <span>{{ comment.author.username }}</span>
+        <button v-if="data.isOwner"></button>
+      </div>
     </div>
   </div>
 </template>
@@ -121,6 +124,24 @@ export default class CommentComponent extends Vue {
 .avatar-container img {
   max-width: 40px;
   max-height: 40px;
+}
+
+.actions-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+button {
+  height: 100%;
+  width: 5%;
+
+  background-image: url('https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/remove.png?raw=true');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-origin: content-box;
 }
 
 button:focus {

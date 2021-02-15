@@ -9,7 +9,7 @@
     <div class="container--links">
       <router-link to="/">Home</router-link>
       <router-link to="/app/products">Products</router-link>
-      <router-link to="/app/about">About</router-link>
+      <router-link to="/app/editor">Editor</router-link>
     </div>
 
     <div class="container--buttons">
@@ -18,8 +18,7 @@
         @click="
           () => {
             $router.push({ path: '/app/profile' });
-          }
-        "
+          }"
         class="button button-profile"
       >
         {{ this.$store.getters.currentUser.username }}
