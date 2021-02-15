@@ -5,9 +5,10 @@
         <div>
           <label for="name">Name</label>
           <input
+            @click="cleanErrors"
             class="create__input"
             id="name"
-            v-model="data.name"
+            v-model="data.title"
             type="text"
             name="name"
             required
@@ -16,6 +17,7 @@
         <div>
           <label for="description">Description</label>
           <textarea
+            @click="cleanErrors"
             class="create__textarea"
             id="description"
             v-model="data.description"
@@ -27,6 +29,7 @@
         <div>
           <label for="image">Image</label>
           <input
+            @click="cleanErrors"
             class="create__input"
             id="image"
             v-model="data.image"
@@ -38,6 +41,7 @@
         <div>
           <label for="price">Price</label>
           <input
+            @click="cleanErrors"
             class="create__input"
             id="price"
             v-model="data.price"
@@ -48,10 +52,10 @@
         </div>
       </div>
 
-      <!-- <div v-if="errors.length > 0" class="container-error">
+      <div v-if="errors.length > 0" class="container-error">
         <b>Please, check this errors:</b>
         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-      </div> -->
+      </div>
       <button @click="handleNewProduct" class="login__button">
         Create Product
       </button>
@@ -95,14 +99,28 @@ export default class CreateProduct extends Vue {
         price: this.data.price,
       },
     };
+
     ApiService.post("products", product)
       .then((data) => {
         console.log(data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err.response.data);
+
+        if (!err.response.data.includes("duplicate key value")) {
+          for (var i in err.response.data) {
+            this.errors.push(`${i}: ${err.response.data[i][0]}`);
+          }
+        } else {
+          this.errors.push(`There is a product with name: ${this.data.title}`);
+        }
       });
-    e.preventDefault()
+
+    e.preventDefault();
+  }
+
+  cleanErrors(e) {
+    this.errors = [];
   }
 }
 </script>
