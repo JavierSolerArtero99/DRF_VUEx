@@ -26,17 +26,6 @@
               required
             />
           </div>
-          <div v-if="!this.mode">
-            <label for="email">Email</label>
-            <input
-              class="login__input"
-              id="email"
-              v-model="data.email"
-              type="email"
-              name="email"
-              required
-            />
-          </div>
           <div>
             <label for="password">Password</label>
             <input
@@ -95,10 +84,18 @@ export default class Login extends Vue {
     this.errors = [];
   }
 
+  /* Template Handlers */
+
+  /**
+   * Cambia el metodo para hacer login / registro
+   */
   changeMode(): void {
     this.mode = !this.mode;
   }
 
+  /**
+   * Control de errores en el formulario de usuario
+   */
   checkForm(e) {
     // login
     if (this.mode) {
@@ -118,6 +115,12 @@ export default class Login extends Vue {
       this.data.password.length <= 30
     ) {
       // do a register
+      let user = {
+        username: this.data.username,
+        email: this.data.email,
+        password: this.data.password,
+      } as SetAuth;
+      this.handleRegister(user);
     }
 
     if (this.data.username.length < 3 || this.data.username.length > 15)
@@ -128,9 +131,8 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
-  showErrors(errorsToShow: string) {
-    this.errors.push(errorsToShow);
-  }
+
+  /* Register / login */
 
   handleAuth(user: SetAuth) {
     // LOADING ACTION
@@ -146,6 +148,21 @@ export default class Login extends Vue {
         showErrors: this.showErrors,
       })
     );
+  }
+
+  handleRegister(user: SetAuth) {
+    console.log(user);
+  }
+
+
+  /* Exceptions */
+
+  /**
+   * Show errors in toastr
+   *
+   */
+  showErrors(errorsToShow: string) {
+    this.errors.push(errorsToShow);
   }
 }
 </script>
