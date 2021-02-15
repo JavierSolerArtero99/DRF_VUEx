@@ -141,6 +141,9 @@ export default class Login extends Vue {
 
   /* AUTHENTICATION */
 
+  /**
+   * Handle the user auth petition
+   */
   handleAuth(user: SetAuth) {
     store.dispatch(
       storeTypes.root.actions!.setAuth({

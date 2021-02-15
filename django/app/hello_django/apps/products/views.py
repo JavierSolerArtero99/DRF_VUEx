@@ -24,6 +24,9 @@ class ProductViewSet(APIView):
         newProduct = request.data.get('product', {})
         serializer = ProductSerializer(data=newProduct)
         serializer.is_valid(raise_exception=True)
+        serializer.slug = "esse"
+        print("NUEVO PRODUCTO")
+        print(serializer)
         serializer.save()
 
         return Response({"CREATE": "DONE"}, status=status.HTTP_201_CREATED)
