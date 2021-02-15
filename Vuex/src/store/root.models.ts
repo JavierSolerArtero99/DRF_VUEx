@@ -23,6 +23,7 @@ export type SetAuth = {
   username: string;
   email: string;
   password: string;
+  isLogin: boolean;
   changeScreen: any;
   showErrors: any;
 };

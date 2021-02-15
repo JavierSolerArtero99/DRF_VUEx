@@ -7,6 +7,7 @@
           <div>
             <label for="username">Username</label>
             <input
+              @click="cleanErrors"
               class="login__input"
               id="username"
               v-model="data.username"
@@ -120,7 +121,7 @@ export default class Login extends Vue {
         email: this.data.email,
         password: this.data.password,
       } as SetAuth;
-      this.handleRegister(user);
+      this.handleAuth(user);
     }
 
     if (this.data.username.length < 3 || this.data.username.length > 15)
@@ -131,8 +132,15 @@ export default class Login extends Vue {
     e.preventDefault();
   }
 
+  /**
+   * Cleaning errors when introduce new credentials
+  */
+  cleanErrors(e) {
+    this.errors = [];
+  }
+  
 
-  /* Register / login */
+  /* AUTHENTICATION */
 
   handleAuth(user: SetAuth) {
     // LOADING ACTION
@@ -142,6 +150,7 @@ export default class Login extends Vue {
         username: user.username,
         email: user.email,
         password: user.password,
+        isLogin: this.mode,
         changeScreen: () => {
           this.$router.push({ path: "/" });
         },
@@ -150,12 +159,7 @@ export default class Login extends Vue {
     );
   }
 
-  handleRegister(user: SetAuth) {
-    console.log(user);
-  }
-
-
-  /* Exceptions */
+  /* EXCEPTIONS */
 
   /**
    * Show errors in toastr
