@@ -1,4 +1,10 @@
-import { RootState, SetCurrentUser, SetAuth, Product } from "./root.models";
+import {
+  RootState,
+  SetCurrentUser,
+  SetAuth,
+  Product,
+  HomeLogin
+} from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
@@ -7,6 +13,7 @@ import { destroyToken, saveToken } from "../common/jwt.service";
 
 export interface RootActions {
   setAuth: SetAuth;
+  homeLogin: HomeLogin;
   purgeAuth: void;
 }
 
@@ -15,7 +22,7 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
   // Login
   setAuth({ commit }, { payload }) {
-    ApiService.post("users/login", { payload })
+    ApiService.post("users/login", { user: payload })
       .then(({ data }) => {
         saveToken(data.user.token);
         commit(rootMutationsTypes.setCurrentUser(data.user));
@@ -30,15 +37,28 @@ const actions: DefineActionTree<RootActions, RootState> = {
       });
   },
 
+  // Home auto login with token
+  homeLogin({ commit }, { payload }) {
+    ApiService.setHeader();
+    ApiService.get("user").then(({ data }) => {
+      saveToken(data.user.token);
+      commit(rootMutationsTypes.setCurrentUser(data.user));
+    }).catch(err => {
+      console.log("ERROR EN ACTION");
+      console.log(err);
+    });
+  },
+
   purgeAuth({ commit }) {
     destroyToken();
     commit(rootMutationsTypes.purgeCurrentUser());
-  },
+  }
 };
 
 export const rootActionsTypes: DefineTypes<RootActions> = {
   setAuth: payload => ({ type: "setAuth", payload }),
-  purgeAuth: payload => ({ type: "purgeAuth", payload })
+  purgeAuth: payload => ({ type: "purgeAuth", payload }),
+  homeLogin: payload => ({ type: "homeLogin", payload })
 };
 
 export default actions;

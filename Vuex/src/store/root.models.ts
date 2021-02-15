@@ -27,6 +27,10 @@ export type SetAuth = {
   showErrors: any;
 };
 
+export type HomeLogin = {
+  
+} 
+
 export type Product = {
   id: number;
   title: string;

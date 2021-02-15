@@ -14,7 +14,7 @@
 
     <div class="container--buttons">
       <button
-        v-if="data.currentUser.isAuthed"
+        v-if="this.$store.getters.currentUser.isAuthed"
         @click="
           () => {
             $router.push({ path: '/app/profile' });
@@ -22,10 +22,10 @@
         "
         class="button button-profile"
       >
-        {{ data.currentUser.username }}
+        {{ this.$store.getters.currentUser.username }}
       </button>
       <button @click="handleAuth" class="button button-login">
-        {{ data.currentUser.username ? "Logout" : "Login" }}
+        {{ this.$store.getters.currentUser.isAuthed ? "Logout" : "Login" }}
       </button>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default class Header extends Vue {
   };
 
   handleAuth() {
-    if (this.data.currentUser.isAuthed) {
+    if (this.$store.getters.currentUser.isAuthed) {
       store
         .dispatch(storeTypes.root.actions!.purgeAuth())
         .then((res) => this.$router.push({ path: "/login" }));
