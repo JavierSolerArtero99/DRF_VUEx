@@ -1,7 +1,6 @@
 <template>
   <div>
     <Header />
-    <h1>{{ this.$store.getters.currentUser }}</h1>
     <router-view />
     <Footer />
   </div>
