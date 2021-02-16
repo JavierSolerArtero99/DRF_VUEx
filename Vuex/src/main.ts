@@ -12,8 +12,8 @@ import {
   Products,
   Profile,
   EditProfile,
-  CreateProduct,
-  ProductDetails
+  ProductDetails,
+  ProductEditor
 } from "./components";
 import ApiService from "./common/api.service";
 
@@ -34,18 +34,17 @@ const router = new VueRouter({
       component: Home,
       children: [
         { path: "products", component: Products },
-        { path: "editor/", component: CreateProduct },
-        { path: "editor/:id", component: CreateProduct },
+        { path: "editor/", component: ProductEditor },
+        { path: "editor/:id", component: ProductEditor },
         { path: "products/:id", name: "details", component: ProductDetails },
         { path: "about", component: Products },
-        // {
-        //   path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
-        //     if (store.getters.currentUser.isAuthed) {
-        //       next();
-        //     } else next({ path: '/' });
-        //   }
-        // },
-        { path: "profile", component: Profile },
+        {
+          path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
+            if (store.getters.currentUser.isAuthed) {
+              next();
+            } else next({ path: '/' });
+          }
+        },
         { path: "profile-edit", component: EditProfile }
       ]
     },
