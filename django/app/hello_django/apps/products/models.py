@@ -16,6 +16,7 @@ from django.db import models
 #         # default ordering for most models.
 #         ordering = ['-created_at', '-updated_at']
 
+from ..profiles.models import Profile
 
 class Product(models.Model):
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
@@ -23,6 +24,8 @@ class Product(models.Model):
 
     description = models.TextField()
     body = models.TextField()
+
+    author = models.ForeignKey('profiles.Profile', related_name = 'author', on_delete = models.CASCADE)
 
     def __str__(self):
         return self.title

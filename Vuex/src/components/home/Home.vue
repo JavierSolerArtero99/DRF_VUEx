@@ -32,8 +32,6 @@ export default class Home extends Vue {
   mounted() {
     if (getToken()) {
       store.dispatch(storeTypes.root.actions!.homeLogin({})).then(() => {});
-    } else {
-      console.log("There is NOOOOO TOKEN");
     }
   }
 }

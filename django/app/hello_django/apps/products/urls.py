@@ -14,7 +14,8 @@ from .views import (
 #     url(r'/products/?$', ProductViewSet.as_view()),
 # ]
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    url(r'^products/?$', ProductViewSet.as_view()),
+    url(r'^products/?$', csrf_exempt(ProductViewSet)),
 ]
