@@ -5,7 +5,6 @@ import store from "./store";
 import { vuetify } from "./core/plugins";
 import { currency } from "./core/filters";
 import {
-  Header,
   NotFound,
   Home,
   Login,
@@ -39,19 +38,26 @@ const router = new VueRouter({
         { path: "products/:id", name: "details", component: ProductDetails },
         { path: "about", component: Products },
         {
-          path: 'profile', component: Profile, beforeEnter: (to, from, next) => {
-            if (store.getters.currentUser.isAuthed) {
-              next();
-            } else next({ path: '/' });
-          }
+          path: 'profile', component: Profile, 
+            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAuthed', to, from, next)
         },
-        { path: "profile-edit", component: EditProfile }
+        { 
+          path: "profile-edit", component: EditProfile,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAuthed', to, from, next)
+        }
       ]
     },
     { path: "/login", component: Login },
-    { path: "/app/*", component: NotFound }
+    { path: "/*", component: NotFound }
   ]
 });
+
+function checkRoutePermissions(failurePath: string, property: any, to, from, next): void {
+  if (store.getters.currentUser[property]) {
+    next();
+
+  } else next({ path: failurePath })
+}
 
 new Vue({
   router,
