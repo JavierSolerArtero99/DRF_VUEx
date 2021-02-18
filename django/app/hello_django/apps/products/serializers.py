@@ -7,7 +7,6 @@ class ProductSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
     title = serializers.CharField(required=True)
     image = serializers.CharField(required=False)
-    subtitle = serializers.CharField(required=True)
     price = serializers.FloatField(max_value=None, min_value=None, required=False)
     description = serializers.CharField(required=True)
     author = ProfileSerializer(required=False)
@@ -17,7 +16,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = (
             'slug',
             'title',
-            'subtitle',
             'image',
             'price',
             'description',

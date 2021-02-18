@@ -1,29 +1,44 @@
 from django.shortcuts import render
 
 from rest_framework.views import APIView
-from rest_framework import status, mixins
+from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
 # from rest_framework.permissions import (IsAuthenticatedOrReadOnly)
 
 from .models import Product
 from .serializers import ProductSerializer
 
-class ProductViewSet(mixins.CreateModelMixin, 
-                     mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin):
+
+class ProductViewSet(
+        mixins.ListModelMixin,
+        mixins.CreateModelMixin,
+        viewsets.GenericViewSet):
 
     # permissions_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = ProductSerializer
-
-    results = Product.objects.all()
+    queryset = Product.objects.select_related('author', 'author__user')
     serializer = ProductSerializer
 
     def get_queryset(self):
-        return self.queryset
+        queryset = self.queryset
 
-    # def get(self, request):
-    #     serializedData = ProductSerializer(self.results, many=True)
-    #     return Response({'ProductsList': serializedData.data}, status=status.HTTP_200_OK)
+        author = self.request.query_params.get('author', None)
+        if author is not None:
+            queryset = queryset.filter(author__user__username=author)
+        return queryset
+
+    def list(self, request):
+        serializer_context = {'request': request}
+        page = self.paginate_queryset(self.get_queryset())
+
+        serializer = self.serializer_class(
+            page,
+            context=serializer_context,
+            many=True
+        )
+
+        # return self.get_paginated_response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def create(self, request):
 
@@ -42,13 +57,3 @@ class ProductViewSet(mixins.CreateModelMixin,
         serializer.save()
 
         return Response(serializer.data, satus=status.HTTP_201_CREATED)
-
-        # newProduct = request.data.get('product', {})
-        # serializer = ProductSerializer(data=newProduct)
-        # serializer.is_valid(raise_exception=True)
-        # # serializer.author = 
-        # print("NUEVO PRODUCTO")
-        # print(serializer)
-        # serializer.save()
-
-        # return Response({"CREATE": "DONE"}, status=status.HTTP_201_CREATED)
