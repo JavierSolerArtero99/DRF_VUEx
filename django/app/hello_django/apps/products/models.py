@@ -25,6 +25,7 @@ class Product(models.Model):
 
     description = models.TextField()
     body = models.TextField()
+    price = models.FloatField(default=0)
 
     author = models.ForeignKey('profiles.Profile', related_name = 'profile', on_delete = models.CASCADE)
 
