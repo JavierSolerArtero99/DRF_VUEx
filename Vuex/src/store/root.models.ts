@@ -37,9 +37,8 @@ export type HomeLogin = {
 } 
 
 export type Product = {
-  id: number;
+  // id: number;
   title: string;
-  subtitle: string;
   description: string;
   price: number
   image: string;

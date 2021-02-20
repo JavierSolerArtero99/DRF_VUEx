@@ -21,11 +21,12 @@ from ..profiles.models import Profile
 class Product(models.Model):
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     title = models.CharField(db_index=True, max_length=255)
+    image = models.TextField(default=None)
 
     description = models.TextField()
     body = models.TextField()
 
-    author = models.ForeignKey('profiles.Profile', related_name = 'author', on_delete = models.CASCADE)
+    author = models.ForeignKey('profiles.Profile', related_name = 'profile', on_delete = models.CASCADE)
 
     def __str__(self):
         return self.title

@@ -3,21 +3,22 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
-# from rest_framework.permissions import (IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (IsAuthenticatedOrReadOnly)
 
 from .models import Product
 from .serializers import ProductSerializer
-
+from ..profiles.serializers import ProfileSerializer
 
 class ProductViewSet(
         mixins.ListModelMixin,
         mixins.CreateModelMixin,
         viewsets.GenericViewSet):
 
-    # permissions_classes = (IsAuthenticatedOrReadOnly,)
+    permissions_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = ProductSerializer
     queryset = Product.objects.select_related('author', 'author__user')
     serializer = ProductSerializer
+    userSerializer = ProfileSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -47,13 +48,15 @@ class ProductViewSet(
             'request': request
         }
 
-        serializer_data = request.data.get('product', {})
 
+        serializer_data = request.data.get('product', {})
+        # author_serialized = request.data.get('product.user', {})
         serializer = self.serializer_class(
             data=serializer_data, context=serializer_context
-        )
-
+        )   
         serializer.is_valid(raise_exception=True)
+        # author = serializer.data.author
+        # print(serializer.data.author)
         serializer.save()
 
-        return Response(serializer.data, satus=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
