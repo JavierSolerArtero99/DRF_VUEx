@@ -1,14 +1,15 @@
 <template>
   <div class="container">
-    <form @submit="handleNewProduct" class="create__form">
+    <form @submit="handleProduct" class="create__form">
       <div class="input__container">
         <div>
           <label for="name">Name</label>
           <input
+            :disabled="editMode"
             @click="cleanErrors"
             class="create__input"
             id="name"
-            v-model="data.title"
+            v-model="data.product.title"
             type="text"
             name="name"
             required
@@ -20,7 +21,7 @@
             @click="cleanErrors"
             class="create__input"
             id="description"
-            v-model="data.description"
+            v-model="data.product.description"
             type="text"
             name="description"
             required
@@ -32,7 +33,7 @@
             @click="cleanErrors"
             class="create__input"
             id="image"
-            v-model="data.image"
+            v-model="data.product.image"
             type="text"
             name="image"
             required
@@ -44,7 +45,7 @@
             @click="cleanErrors"
             class="create__input"
             id="price"
-            v-model="data.price"
+            v-model="data.product.price"
             type="number"
             name="price"
             required
@@ -56,8 +57,8 @@
         <b>Please, check this errors:</b>
         <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
       </div>
-      <button @click="handleNewProduct" class="login__button">
-        Create Product
+      <button class="login__button">
+        {{ editMode ? "Edit product" : "Create product" }}
       </button>
     </form>
   </div>
@@ -81,31 +82,43 @@ export default class CreateProduct extends Vue {
   }
 
   data = {
-    title: "",
-    description: "",
-    image:
-      "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
-    price: 0,
+    product: {
+      title: "",
+      description: "",
+      image:
+        "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
+      price: 0,
+    } as Product | null,
   };
 
   errors: string[] = [];
+  editMode: boolean = false;
 
-  mounted() {}
+  beforeDestroy() {
+    this.data.product = null;
+  }
 
-  handleNewProduct(e) {
-    let product = {
-      product: {
-        slug: this.data.title,
-        title: this.data.title,
-        description: this.data.description,
-        image: this.data.image,
-        price: this.data.price,
-        author: store.getters.currentUser
-      } as Product,
-    };
+  mounted() {
+    if (this.$route.params.slug) {
+      ApiService.get("products/" + this.$route.params.slug).then((res) => {
+        if (res.data) {
+          this.editMode = true;
+          this.data.product = res.data;
+        }
+      });
+    }
+  }
 
-    ApiService.post("products/", product)
+  handleProduct(e) {
+        
+    if (!this.editMode && this.data.product) {
+      this.data.product.slug = this.data.product.title;
+      this.data.product.author = store.getters.currentUser;
+
+      ApiService.post("products/", {product: this.data.product})
       .then((data) => {
+        console.log(data.data);
+        
         this.$router.push({
           name: 'details',
           params: { slug: data.data.slug },
@@ -117,8 +130,20 @@ export default class CreateProduct extends Vue {
             this.errors.push(`${i}: ${err.response.data[i][0]}`);
           }
         } else {
-          this.errors.push(`There is a product with name: ${this.data.title}`);
+          if (this.data.product) this.errors.push(`There is a product with name: ${this.data.product.title}`);
         }
+      });
+    }
+
+    else if (this.data.product) ApiService.update("products/", this.$route.params.slug, {product: this.data.product})
+      .then((data) => {
+        this.$router.push({
+          name: 'details',
+          params: { slug: data.data.slug },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
 
     e.preventDefault();

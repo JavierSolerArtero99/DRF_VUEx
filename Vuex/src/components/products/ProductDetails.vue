@@ -32,7 +32,12 @@
             <button
               v-if="data.product.author.id === data.currentUser.id"
               class="icon icon--edit"
-              @click="() => $router.push({ path: '/app/editor/' })"
+              @click="
+                () =>
+                  $router.push({
+                    name: 'editor',
+                    params: { slug: data.product.slug },
+                  })"
             ></button>
           </div>
         </div>
@@ -96,7 +101,7 @@ export default class ProductPreview extends Vue {
   remove() {
     if (this.data.product) {
       ApiService.delete("products/" + this.$route.params.slug).then((res) => {
-        this.$router.push({ path: '/app/products' })
+        this.$router.push({ path: "/app/products" });
       });
     }
   }

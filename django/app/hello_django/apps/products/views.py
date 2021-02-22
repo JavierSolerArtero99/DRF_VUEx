@@ -77,6 +77,30 @@ class ProductViewSet(
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def update(self, request, slug):
+        serializer_context = {
+            'author': request.user.profile,
+            'request': request
+        }
+
+        try:
+            serializer_instance = self.queryset.get(slug=slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug does not exist.')
+            
+        serializer_data = request.data.get('product', {})
+
+        serializer = self.serializer_class(
+            serializer_instance, 
+            context=serializer_context,
+            data=serializer_data, 
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def destroy(self, request, slug):
         try:
             product = self.queryset.get(slug=slug)
