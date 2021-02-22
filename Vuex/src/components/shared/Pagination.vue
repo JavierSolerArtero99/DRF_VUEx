@@ -1,42 +1,49 @@
 <template>
   <div class="pagination">
-    <button class="button-focus" :disabled="offset===1" @click="changePage(offset-1)">Previous</button>
+    <button class="button-focus" :disabled="data.currentOffset===1" @click="changePage(data.currentOffset-1)">Previous</button>
     <div class="pages">
       <button
         class="page"
         v-for="page in data.totalPages"
         v-bind:key="page"
-        v-bind:class="page === offset ? 'page--current' : 'page--stand'"
+        v-bind:class="page === data.currentOffset ? 'page--current' : 'page--stand'"
         @click="changePage(page)"
       >
         {{ page }}
       </button>
     </div>
-    <button class="button-focus" :disabled="offset>=data.totalPages" @click="changePage(offset+1)">Next</button>
+    <button class="button-focus" :disabled="data.currentOffset>=data.totalPages" @click="changePage(data.currentOffset+1)">Next</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Emit} from "vue-property-decorator";
+import { Component, Prop, Vue, Emit, Watch} from "vue-property-decorator";
 
 @Component({
   name: "pagination",
 })
 export default class Pagination extends Vue {
   @Prop({ required: true, type: Number }) readonly limit: number;
-  @Prop({ required: true, type: Number }) readonly offset: number;
-  @Prop({ required: true, type: Number }) readonly total: number;
+  @Prop({ required: true, type: Number }) offset: number;
+  @Prop({ required: true, type: Number }) total: number;
 
   constructor() {
     super();
   }
 
   data = {
-    totalPages: 0
+    totalPages: 0,
+    currentOffset: 0
   }
 
-  mounted() {
-    this.data.totalPages = Math.ceil(this.total / this.limit);
+  @Watch("offset")
+  onChangeOffset(value: number, oldValue: number) {
+    this.data.currentOffset = value === 0 ? 1 : value + 1;
+  }
+
+  @Watch("total")
+  refreshPagination(value: number, oldValue: number) {
+    this.data.totalPages = Math.ceil(value / this.limit);
   }
 
   @Emit("change-page")

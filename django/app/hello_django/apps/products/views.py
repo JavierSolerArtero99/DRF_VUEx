@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import (IsAuthenticatedOrReadOnly)
 
 from .models import Product
@@ -14,6 +15,7 @@ class ProductViewSet(
         mixins.CreateModelMixin,
         viewsets.GenericViewSet):
 
+    lookup_field = 'slug'
     permissions_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = ProductSerializer
     queryset = Product.objects.select_related('author', 'author__user')
@@ -38,8 +40,22 @@ class ProductViewSet(
             many=True
         )
 
-        # return self.get_paginated_response(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return self.get_paginated_response(serializer.data)
+
+    def retrieve(self, request, slug):
+        serializer_context = {'request': request}
+
+        try:
+            serializer_instance = self.queryset.get(slug=slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug does not exist.')
+
+        serializer = self.serializer_class(
+            serializer_instance,
+            context=serializer_context
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
 
@@ -60,3 +76,13 @@ class ProductViewSet(
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, slug):
+        try:
+            product = self.queryset.get(slug=slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug does not exist.')
+
+        product.delete()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
