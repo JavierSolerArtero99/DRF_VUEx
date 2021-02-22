@@ -110,41 +110,44 @@ export default class CreateProduct extends Vue {
   }
 
   handleProduct(e) {
-        
     if (!this.editMode && this.data.product) {
       this.data.product.slug = this.data.product.title;
       this.data.product.author = store.getters.currentUser;
 
-      ApiService.post("products/", {product: this.data.product})
-      .then((data) => {
-        console.log(data.data);
-        
-        this.$router.push({
-          name: 'details',
-          params: { slug: data.data.slug },
-        });
-      })
-      .catch((err) => {
-        if (!err.response.data.includes("duplicate key value")) {
-          for (var i in err.response.data) {
-            this.errors.push(`${i}: ${err.response.data[i][0]}`);
-          }
-        } else {
-          if (this.data.product) this.errors.push(`There is a product with name: ${this.data.product.title}`);
-        }
-      });
-    }
+      ApiService.post("products/", { product: this.data.product })
+        .then((data) => {
+          console.log(data.data);
 
-    else if (this.data.product) ApiService.update("products/", this.$route.params.slug, {product: this.data.product})
-      .then((data) => {
-        this.$router.push({
-          name: 'details',
-          params: { slug: data.data.slug },
+          this.$router.push({
+            name: "details",
+            params: { slug: data.data.slug },
+          });
+        })
+        .catch((err) => {
+          if (!err.response.data.includes("duplicate key value")) {
+            for (var i in err.response.data) {
+              this.errors.push(`${i}: ${err.response.data[i][0]}`);
+            }
+          } else {
+            if (this.data.product)
+              this.errors.push(
+                `There is a product with name: ${this.data.product.title}`
+              );
+          }
         });
+    } else if (this.data.product)
+      ApiService.update("products/", this.$route.params.slug, {
+        product: this.data.product,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((data) => {
+          this.$router.push({
+            name: "details",
+            params: { slug: data.data.slug },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
     e.preventDefault();
   }
