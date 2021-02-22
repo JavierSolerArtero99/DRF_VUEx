@@ -40,8 +40,7 @@ export type ListProducts = {
 }
 
 export type Product = {
-  id: number;
-  slug: string;
+  // id: number;
   title: string;
   description: string;
   price: number

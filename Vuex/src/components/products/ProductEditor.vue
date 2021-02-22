@@ -68,7 +68,7 @@ import Vue from "vue";
 
 import Component from "vue-class-component";
 import ApiService from "../../common/api.service";
-import store, { Product, storeTypes } from "../../store";
+import store, { Product } from "../../store";
 
 @Component({
   name: "createProduct",
@@ -93,16 +93,17 @@ export default class CreateProduct extends Vue {
 
   handleNewProduct(e) {
     let product = {
-      id: 0,
-      slug: this.data.title,
-      title: this.data.title,
-      description: this.data.description,
-      image: this.data.image,
-      price: this.data.price,
-      author: store.getters.currentUser,
-    } as Product;
+      product: {
+        slug: this.data.title,
+        title: this.data.title,
+        description: this.data.description,
+        image: this.data.image,
+        price: this.data.price,
+        author: store.getters.currentUser
+      } as Product,
+    };
 
-    ApiService.post("products", product)
+    ApiService.post("products/", product)
       .then((data) => {
         console.log(data);
       })
