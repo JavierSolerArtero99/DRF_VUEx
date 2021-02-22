@@ -7,19 +7,25 @@
         :product="product"
       />
     </div>
-    <Pagination @change-page="listProducts" :limit="10" :offset="data.offset" :total="data.totalProducts" />
+    <Pagination
+      @change-page="listProducts"
+      :limit="10"
+      :offset="data.offset"
+      :total="data.totalProducts"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import store, { storeTypes, Product } from "../../store";
 import { Route } from "vue-router";
 
 import ProductPreview from "./ProductPreview.vue";
 import Pagination from "../shared/Pagination.vue";
 import ApiService from "../../common/api.service";
+
+const LIMIT: number = 10;
 
 @Component({
   name: "products",
@@ -32,7 +38,7 @@ export default class Products extends Vue {
   data = {
     products: [] as Product[],
     totalProducts: 1 as number,
-    offset: 1 as number
+    offset: 1 as number,
   };
 
   constructor() {
@@ -40,23 +46,27 @@ export default class Products extends Vue {
   }
 
   mounted() {
-    ApiService.get('products').then(
-      res => {
-        if (res.data) {
-          this.data.products = res.data;
-        }
-      }
-    )
+    this.listProducts(1);
   }
 
   beforeDestroy() {
     this.data.products = [];
     this.data.totalProducts = 0;
-    this.data.offset = 1;
+    this.data.offset = LIMIT;
   }
 
-  listProducts(value) {
-    console.log(value)
+  listProducts(value: number): void {
+    value = value - 1;
+
+    ApiService.list("products/?limit=10&offset=" + value*LIMIT).then(
+      (res) => {
+        if (res.data.results) {
+          this.data.products = res.data.results;
+          this.data.totalProducts = res.data.count;
+          this.data.offset = value;
+        }
+      }
+    );
   }
 }
 </script>

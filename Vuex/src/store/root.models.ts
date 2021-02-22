@@ -5,7 +5,7 @@ export interface RootState {
   errors: String;
 }
 
-interface User {
+export type User = {
   id: number;
   username: string;
   password: string;

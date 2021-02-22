@@ -143,6 +143,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 AUTH_USER_MODEL = "authentication.User"
 
+APPEND_SLASH = "false"
+
 REST_FRAMEWORK = {
     'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (

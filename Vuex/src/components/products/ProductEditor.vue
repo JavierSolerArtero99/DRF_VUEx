@@ -108,7 +108,7 @@ export default class CreateProduct extends Vue {
       .then((data) => {
         this.$router.push({
           name: 'details',
-          params: { id: data.data.id },
+          params: { slug: data.data.slug },
         });
       })
       .catch((err) => {

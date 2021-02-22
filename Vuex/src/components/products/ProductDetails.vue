@@ -23,6 +23,7 @@
             <button
               v-if="data.product.author.id === data.currentUser.id"
               class="icon icon--red"
+              @click="remove"
             ></button>
             <button
               v-if="data.product.author.id !== data.currentUser.id"
@@ -31,14 +32,21 @@
             <button
               v-if="data.product.author.id === data.currentUser.id"
               class="icon icon--edit"
-              @click="() => $router.push({ path: '/app/editor/1' })"
+              @click="() => $router.push({ path: '/app/editor/' })"
             ></button>
           </div>
         </div>
       </div>
-      <Comments v-show="this.commentsView" :productId="data.product.id"/>
-      <button @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
-        {{ this.commentsView ? 'Hide comments' : 'Show comments' }}
+      <Comments v-show="this.commentsView" :productId="data.product.id" />
+      <button
+        @click="
+          () => {
+            this.commentsView = !this.commentsView;
+          }
+        "
+        class="button--comments"
+      >
+        {{ this.commentsView ? "Hide comments" : "Show comments" }}
       </button>
     </div>
   </div>
@@ -47,35 +55,49 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ApiService from "../../common/api.service";
-import store, { storeTypes, Product } from "../../store";
+import store, { storeTypes, Product, User } from "../../store";
 
 import Comments from "../comments/Comments.vue";
 
 @Component({
   name: "productPreview",
-  components : {
-    Comments
-  }
+  components: {
+    Comments,
+  },
 })
 export default class ProductPreview extends Vue {
   constructor() {
     super();
   }
-    
+
   commentsView: boolean = false;
 
   data = {
-    product: {} as Product,
-    currentUser: store.getters.currentUser,
+    product: {} as Product | null,
+    currentUser: {} as User | null,
   };
 
+  beforeDestroy() {
+    this.data.product = null;
+    this.data.currentUser = null;
+  }
+
   mounted() {
+    this.data.currentUser = store.getters.currentUser;
     if (this.$route.params.slug) {
-      ApiService.get('products', this.$route.params.slug).then(
-        res => {
-          console.log(res)
+      ApiService.get("products/" + this.$route.params.slug).then((res) => {
+        if (res.data) {
+          this.data.product = res.data;
         }
-      )
+      });
+    }
+  }
+
+  remove() {
+    if (this.data.product) {
+      ApiService.delete("products/" + this.$route.params.slug).then((res) => {
+        this.$router.push({ path: '/app/products' })
+      });
     }
   }
 }
@@ -284,7 +306,8 @@ export default class ProductPreview extends Vue {
   background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/removenegative.png?raw=true");
 }
 
-.icon--red:disabled, .icon--red:disabled:hover {
+.icon--red:disabled,
+.icon--red:disabled:hover {
   opacity: 0.5;
   border: 2px solid #c23834;
   background-color: transparent;
@@ -293,7 +316,7 @@ export default class ProductPreview extends Vue {
 
 .icon--edit {
   border: 2px solid #5136ff;
-  
+
   background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/edit.png?raw=true");
 }
 
