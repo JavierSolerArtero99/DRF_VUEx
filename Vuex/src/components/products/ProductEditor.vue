@@ -67,8 +67,8 @@
 import Vue from "vue";
 
 import Component from "vue-class-component";
-import ApiService from "../../../../vuex/src/common/api.service";
-import store, { Product } from "../../../../vuex/src/store";
+import ApiService from "../../common/api.service";
+import store, { Product } from "../../store";
 import { Route } from "vue-router";
 
 @Component({

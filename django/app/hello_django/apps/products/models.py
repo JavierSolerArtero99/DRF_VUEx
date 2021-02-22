@@ -31,3 +31,15 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+class Like(models.Model):
+    likes = models.IntegerField(default=0)
+
+    likeAuthor = models.ForeignKey(
+        'profiles.Profile', related_name='likeAuthor', on_delete=models.CASCADE)
+
+    likeProduct = models.ForeignKey(
+        'products.Product', related_name='likeProduct', on_delete=models.CASCADE, default=0)
+
+    def __str__(self):
+        return self.likes
