@@ -16,9 +16,9 @@
         </div>
         <div>
           <label for="description">Description</label>
-          <textarea
+          <input
             @click="cleanErrors"
-            class="create__textarea"
+            class="create__input"
             id="description"
             v-model="data.description"
             type="text"
@@ -68,6 +68,7 @@ import Vue from "vue";
 
 import Component from "vue-class-component";
 import ApiService from "../../common/api.service";
+import store, { Product, storeTypes } from "../../store";
 
 @Component({
   name: "createProduct",
@@ -81,7 +82,8 @@ export default class CreateProduct extends Vue {
   data = {
     title: "",
     description: "",
-    image: "",
+    image:
+      "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
     price: 0,
   };
 
@@ -91,22 +93,20 @@ export default class CreateProduct extends Vue {
 
   handleNewProduct(e) {
     let product = {
-      product: {
-        slug: this.data.title,
-        title: this.data.title,
-        description: this.data.description,
-        image: this.data.image,
-        price: this.data.price,
-      },
-    };
+      id: 0,
+      slug: this.data.title,
+      title: this.data.title,
+      description: this.data.description,
+      image: this.data.image,
+      price: this.data.price,
+      author: store.getters.currentUser,
+    } as Product;
 
     ApiService.post("products", product)
       .then((data) => {
         console.log(data);
       })
       .catch((err) => {
-        // console.log(err.response.data);
-
         if (!err.response.data.includes("duplicate key value")) {
           for (var i in err.response.data) {
             this.errors.push(`${i}: ${err.response.data[i][0]}`);

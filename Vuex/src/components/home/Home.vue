@@ -31,7 +31,7 @@ export default class Home extends Vue {
 
   mounted() {
     if (getToken()) {
-      store.dispatch(storeTypes.root.actions!.homeLogin({})).then(() => {});
+      store.dispatch(storeTypes.root.actions!.autoAuth()).then(() => {});
     }
   }
 }

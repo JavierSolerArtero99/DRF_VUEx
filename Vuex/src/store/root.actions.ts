@@ -1,10 +1,8 @@
 import {
   RootState,
-  SetCurrentUser,
   SetAuth,
-  Product,
-  HomeLogin,
-  Loading
+  ToggleLoading,
+  ListProducts
 } from "./root.models";
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
@@ -13,35 +11,22 @@ import ApiService from "../common/api.service";
 import { destroyToken, saveToken } from "../common/jwt.service";
 
 export interface RootActions {
-  setLoading: Loading;
-  quitLoading: Loading;
+  toggleLoading: ToggleLoading;
   setAuth: SetAuth;
-  homeLogin: HomeLogin;
+  autoAuth: void;
   purgeAuth: void;
+  listProducts: ListProducts;
 }
 
 const actions: DefineActionTree<RootActions, RootState> = {
-  /* LOADING */
-
-  // Loading = TRUE
-  setLoading({ commit }, { payload }) {
-    commit(rootMutationsTypes.changeLoading(false));
+  toggleLoading({ commit }) {
+    commit(rootMutationsTypes.toggleLoading(!this.getters.isLoading));
   },
 
-  // Loading = FALSE
-  quitLoading({ commit }, { payload }) {
-    commit(rootMutationsTypes.changeLoading(false));
-  },
-
-  /* AUTHENTICATION */
-
-  // Authenticaiton
   setAuth({ commit }, { payload }) {
-    // set the loading state to TRUE
-    commit(rootMutationsTypes.changeLoading(true));
+    commit(rootMutationsTypes.toggleLoading(true));
 
     if (payload.isLogin) {
-      // Login
       ApiService.post("users/login", { user: payload })
         .then(({ data }) => {
           saveToken(data.user.token);
@@ -56,10 +41,9 @@ const actions: DefineActionTree<RootActions, RootState> = {
           payload.showErrors(errors);
         })
         .finally(() => {
-          commit(rootMutationsTypes.changeLoading(false));
+          commit(rootMutationsTypes.toggleLoading(false));
         });
     } else {
-      // Register
       ApiService.post("users/", { user: payload })
         .then(({ data }) => {
           saveToken(data.user.token);
@@ -74,13 +58,12 @@ const actions: DefineActionTree<RootActions, RootState> = {
           payload.showErrors(errors);
         })
         .finally(() => {
-          commit(rootMutationsTypes.changeLoading(true));
+          commit(rootMutationsTypes.toggleLoading(true));
         });
     }
   },
 
-  // Home auto login with token
-  homeLogin({ commit }, { payload }) {
+  autoAuth({ commit }) {
     ApiService.setHeader();
     ApiService.get("user")
       .then(({ data }) => {
@@ -88,24 +71,27 @@ const actions: DefineActionTree<RootActions, RootState> = {
         commit(rootMutationsTypes.setCurrentUser(data.user));
       })
       .catch(err => {
-        console.log("ERROR EN ACTION");
+        console.log("ERROR IN ACTION");
         console.log(err);
       });
   },
 
-  // logout user
   purgeAuth({ commit }) {
     destroyToken();
     commit(rootMutationsTypes.purgeCurrentUser());
+  },
+
+  listProducts({ commit }, { payload }) {
+
   }
 };
 
 export const rootActionsTypes: DefineTypes<RootActions> = {
-  setLoading: payload => ({ type: "setLoading", payload }),
-  quitLoading: payload => ({ type: "quitLoading", payload }),
+  toggleLoading: payload => ({ type: "toggleLoading", payload }),
   setAuth: payload => ({ type: "setAuth", payload }),
   purgeAuth: payload => ({ type: "purgeAuth", payload }),
-  homeLogin: payload => ({ type: "homeLogin", payload })
+  autoAuth: payload => ({ type: "autoAuth", payload }),
+  listProducts: payload => ({ type: "listProducts", payload })
 };
 
 export default actions;

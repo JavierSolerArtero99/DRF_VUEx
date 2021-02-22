@@ -15,7 +15,7 @@
     </div>
     <div class="info-container">
       <span class="title">{{ product.title }}</span>
-      <span class="subtitle">{{ product.subtitle }}</span>
+      <!-- <span class="subtitle">{{ product.subtitle }}</span> -->
       <span class="price">{{ product.price }} €</span>
     </div>
   </div>

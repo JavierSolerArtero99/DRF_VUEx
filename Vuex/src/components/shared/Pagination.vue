@@ -1,24 +1,23 @@
 <template>
   <div class="pagination">
-    <button class="button-focus">Previous</button>
+    <button class="button-focus" :disabled="offset===1" @click="changePage(offset-1)">Previous</button>
     <div class="pages">
       <button
         class="page"
         v-for="page in data.totalPages"
         v-bind:key="page"
         v-bind:class="page === offset ? 'page--current' : 'page--stand'"
+        @click="changePage(page)"
       >
         {{ page }}
       </button>
     </div>
-    <button class="button-focus">Next</button>
+    <button class="button-focus" :disabled="offset>=data.totalPages" @click="changePage(offset+1)">Next</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import store, { storeTypes, Product } from "../../store";
-import { Route } from "vue-router";
+import { Component, Prop, Vue, Emit} from "vue-property-decorator";
 
 @Component({
   name: "pagination",
@@ -38,6 +37,11 @@ export default class Pagination extends Vue {
 
   mounted() {
     this.data.totalPages = Math.ceil(this.total / this.limit);
+  }
+
+  @Emit("change-page")
+  changePage(offset) {
+    return offset;
   }
 }
 </script>
@@ -63,6 +67,10 @@ export default class Pagination extends Vue {
   color: white;
 
   background-color: #ffad37;
+}
+
+button:disabled {
+  opacity: 0.5;
 }
 
 .pages {

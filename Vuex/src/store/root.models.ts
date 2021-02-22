@@ -1,6 +1,6 @@
 /** Root State */
 export interface RootState {
-  loading: boolean;
+  isLoading: boolean;
   currentUser: User;
   errors: String;
 }
@@ -13,14 +13,15 @@ interface User {
   image: string;
   bio: string;
   isAuthed: boolean;
+  isAdmin: boolean;
 }
 
 export type SetCurrentUser = Pick<
   User,
   "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
 >;
-export type Loading = {
-  loading: boolean
+export type ToggleLoading = {
+  isLoading: boolean
 };
 
 export type SetAuth = {
@@ -32,14 +33,16 @@ export type SetAuth = {
   showErrors: any;
 };
 
-export type HomeLogin = {
-  
-} 
+export type ListProducts = {
+  limit: number;
+  offset: number;
+  author?: User;
+}
 
 export type Product = {
   id: number;
+  slug: string;
   title: string;
-  subtitle: string;
   description: string;
   price: number
   image: string;
@@ -54,7 +57,7 @@ export type Comment = {
 }
 
 export const initialRootState: RootState = {
-  loading: false,
+  isLoading: false,
   currentUser: {
     id: 0,
     username: "",
@@ -62,7 +65,8 @@ export const initialRootState: RootState = {
     email: "",
     image: "",
     bio: "",
-    isAuthed: false
+    isAuthed: false,
+    isAdmin: false
   },
   errors: "",
 };

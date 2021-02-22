@@ -71,24 +71,6 @@ export default class ProductPreview extends Vue {
   };
 
   mounted() {
-    this.data.product = {
-      id: parseInt(this.$route.params.id),
-      title: "Shirt",
-      subtitle: "Running shirt",
-      price: 19.99,
-      description: "An amazing shirt to go running every day and get fit",
-      image:
-        "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
-      author: {
-        id: 0,
-        username: "jasoka",
-        email: "jasoka@gmail.com",
-        password: "",
-        image: "",
-        bio: "",
-        isAuthed: true,
-      },
-    };
   }
 }
 </script>

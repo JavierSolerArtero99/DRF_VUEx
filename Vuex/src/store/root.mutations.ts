@@ -2,14 +2,14 @@ import { initialRootState, RootState } from "./root.models";
 import { DefineMutationTree, DefineTypes } from "./store.helpers";
 
 export interface RootMutations {
-  changeLoading: RootState["loading"];
+  toggleLoading: RootState["isLoading"];
   setCurrentUser: RootState["currentUser"];
   purgeCurrentUser: void;
 }
 
 const mutations: DefineMutationTree<RootMutations, RootState> = {
-  changeLoading(state, { payload }) {
-    state.loading = payload;
+  toggleLoading(state, { payload }) {
+    state.isLoading = payload;
   },
   setCurrentUser(state, { payload }) {
     state.currentUser = {
@@ -19,7 +19,8 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       email: payload.email,
       image: payload.image,
       bio: payload.bio,
-      isAuthed: true
+      isAuthed: true,
+      isAdmin: false
     }
   },
   purgeCurrentUser(state) {
@@ -30,13 +31,14 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       email: "",
       image: "",
       bio: "",
-      isAuthed: false
+      isAuthed: false,
+      isAdmin: false
     }
   },
 };
 
 export const rootMutationsTypes: DefineTypes<RootMutations> = {
-  changeLoading: payload => ({ type: "changeLoading", payload }),
+  toggleLoading: payload => ({ type: "toggleLoading", payload }),
   setCurrentUser: payload => ({ type: "setCurrentUser", payload }),
   purgeCurrentUser: payload => ({ type: "purgeCurrentUser", payload })
 };

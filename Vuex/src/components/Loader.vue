@@ -15,7 +15,7 @@ export default Vue.extend({
   name: "Loader",
   computed: {
     promiseInProgress() {
-      return store.state.loading;
+      return store.state.isLoading;
     }
   }
 });

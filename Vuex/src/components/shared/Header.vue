@@ -14,7 +14,7 @@
 
     <div class="container--buttons">
       <button
-        v-if="this.$store.getters.currentUser.isAuthed"
+        v-if="this.$store.getters.currentUser.isAuthed && !this.$store.getters.currentUser.isAdmin"
         @click="
           () => {
             $router.push({ path: '/app/profile' });
@@ -22,6 +22,16 @@
         class="button button-profile"
       >
         {{ this.$store.getters.currentUser.username }}
+      </button>
+      <button
+        v-if="this.$store.getters.currentUser.isAdmin"
+        @click="
+          () => {
+            $router.push({ path: '/app/panel-admin' });
+          }"
+        class="button button-admin"
+      >
+        Panel admin
       </button>
       <button @click="handleAuth" class="button button-login">
         {{ this.$store.getters.currentUser.isAuthed ? "Logout" : "Login" }}
@@ -140,5 +150,10 @@ a:hover {
 
 .button-profile {
   background-color: #5136ff;
+}
+
+.button-admin {
+  color: black;
+  background-color: #ccd2db;
 }
 </style>

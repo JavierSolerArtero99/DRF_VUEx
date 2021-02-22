@@ -44,6 +44,10 @@ const router = new VueRouter({
         { 
           path: "profile-edit", component: EditProfile,
             beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAuthed', to, from, next)
+        },
+        { 
+          path: "panel-admin", component: EditProfile,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAdmin', to, from, next)
         }
       ]
     },

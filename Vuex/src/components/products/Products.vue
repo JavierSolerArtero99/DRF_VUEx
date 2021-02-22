@@ -7,7 +7,7 @@
         :product="product"
       />
     </div>
-    <Pagination :limit="10" :offset="1" :total="100" />
+    <Pagination @change-page="listProducts" :limit="10" :offset="data.offset" :total="data.totalProducts" />
   </div>
 </template>
 
@@ -19,6 +19,7 @@ import { Route } from "vue-router";
 
 import ProductPreview from "./ProductPreview.vue";
 import Pagination from "../shared/Pagination.vue";
+import ApiService from "../../common/api.service";
 
 @Component({
   name: "products",
@@ -30,6 +31,8 @@ import Pagination from "../shared/Pagination.vue";
 export default class Products extends Vue {
   data = {
     products: [] as Product[],
+    totalProducts: 1 as number,
+    offset: 1 as number
   };
 
   constructor() {
@@ -37,26 +40,19 @@ export default class Products extends Vue {
   }
 
   mounted() {
-    for (let i = 0; i < 10; i++) {
-      this.data.products.push({
-        id: i + 1,
-        title: "Shirt",
-        subtitle: "Running shirt",
-        price: 19.99,
-        description: "An amazing shirt to go running every day and get fit",
-        image:
-          "https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/shirt.png?raw=true",
-        author: {
-          id: 0,
-          username: "jasoka",
-          email: "jasoka@gmail.com",
-          password: "",
-          image: "",
-          bio: "",
-          isAuthed: true,
-        },
-      });
-    }
+    ApiService.get('products').then(
+      res => console.log(res)
+    )
+  }
+
+  beforeDestroy() {
+    this.data.products = [];
+    this.data.totalProducts = 0;
+    this.data.offset = 1;
+  }
+
+  listProducts(value) {
+    console.log(value)
   }
 }
 </script>

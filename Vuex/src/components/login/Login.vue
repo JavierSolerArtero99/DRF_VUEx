@@ -4,7 +4,7 @@
       <img src="https://i.ibb.co/sqdfW3W/vuex.png" alt="logo" />
       <form @submit="checkForm" class="login__form">
         <div class="input__container">
-          <div v-if="!this.mode">
+          <div v-if="!this.isLoginMode">
             <label for="username">Username</label>
             <input
               @click="clearErrors"
@@ -46,14 +46,14 @@
         </div>
 
         <button type="submit" class="login__button">
-          {{ this.mode ? "Login" : "Register" }}
+          {{ this.isLoginMode ? "Login" : "Register" }}
         </button>
       </form>
     </div>
 
     <button class="router-link" @click="changeMode">
       {{
-        this.mode ? "You don't have an account?" : "Do you have an account yet?"
+        this.isLoginMode ? "You don't have an account?" : "Do you have an account yet?"
       }}
     </button>
   </div>
@@ -62,7 +62,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import ApiService from "../../common/api.service";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
@@ -76,7 +75,7 @@ export default class Login extends Vue {
   };
 
   errors: string[] = [];
-  mode: boolean = true;
+  isLoginMode: boolean = true;
   logged: boolean = false;
 
   constructor() {
@@ -85,45 +84,36 @@ export default class Login extends Vue {
     this.errors = [];
   }
 
-  /* HANDLERS */
-
-  /**
-   * Cambia el metodo para hacer login / registro
-   */
   changeMode(): void {
-    this.mode = !this.mode;
+    this.isLoginMode = !this.isLoginMode;
   }
 
-  /**
-   * Control de errores en el formulario de usuario
-   */
-  checkForm(e) {
+  checkForm(e): void {
     e.preventDefault();
     this.clearErrors(e);
-    // login
-    if (this.mode) {
+
+    if (this.isLoginMode) {
       let user = {
-        username: this.data.username,
         email: this.data.email,
         password: this.data.password,
       } as SetAuth;
+
       this.handleAuth(user);
       return;
     }
 
-    // Register
     if (
       this.data.username.length >= 3 &&
       this.data.username.length <= 15 &&
       this.data.password.length >= 8 &&
       this.data.password.length <= 30
     ) {
-      // do a register
       let user = {
         username: this.data.username,
         email: this.data.email,
         password: this.data.password,
       } as SetAuth;
+
       this.handleAuth(user);
       return;
     }
@@ -135,25 +125,17 @@ export default class Login extends Vue {
 
   }
 
-  /**
-   * Cleaning errors when introduce new credentials
-   */
-  clearErrors(e) {
+  clearErrors(e): void {
     this.errors = [];
   }
 
-  /* AUTHENTICATION */
-
-  /**
-   * Handle the user auth petition
-   */
-  handleAuth(user: SetAuth) {
+  handleAuth(user: SetAuth): void {
     store.dispatch(
       storeTypes.root.actions!.setAuth({
         username: user.username,
         email: user.email,
         password: user.password,
-        isLogin: this.mode,
+        isLogin: this.isLoginMode,
         changeScreen: () => {
           this.$router.push({ path: "/" });
         },
@@ -162,13 +144,7 @@ export default class Login extends Vue {
     );
   }
 
-  /* EXCEPTIONS */
-
-  /**
-   * Show errors in toastr
-   *
-   */
-  showErrors(errorsToShow: string) {
+  showErrors(errorsToShow: string): void {
     this.errors.push(errorsToShow);
   }
 }
