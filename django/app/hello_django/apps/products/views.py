@@ -32,7 +32,7 @@ class ProductViewSet(
 
     def list(self, request):
         serializer_context = {'request': request}
-        page = self.paginate_queryset(self.get_queryset())
+        page = self.paginate_queryset(self.get_queryset().order_by('id'))
 
         serializer = self.serializer_class(
             page,
