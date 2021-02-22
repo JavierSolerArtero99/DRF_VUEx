@@ -67,8 +67,9 @@
 import Vue from "vue";
 
 import Component from "vue-class-component";
-import ApiService from "../../common/api.service";
-import store, { Product } from "../../store";
+import ApiService from "../../../../vuex/src/common/api.service";
+import store, { Product } from "../../../../vuex/src/store";
+import { Route } from "vue-router";
 
 @Component({
   name: "createProduct",
@@ -105,7 +106,10 @@ export default class CreateProduct extends Vue {
 
     ApiService.post("products/", product)
       .then((data) => {
-        console.log(data);
+        this.$router.push({
+          name: 'details',
+          params: { id: data.data.id },
+        });
       })
       .catch((err) => {
         if (!err.response.data.includes("duplicate key value")) {

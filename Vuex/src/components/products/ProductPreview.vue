@@ -4,7 +4,7 @@
       () => {
         $router.push({
           name: 'details',
-          params: { id: product.id },
+          params: { slug: product.slug },
         });
       }
     "

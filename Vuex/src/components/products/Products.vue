@@ -41,7 +41,11 @@ export default class Products extends Vue {
 
   mounted() {
     ApiService.get('products').then(
-      res => console.log(res)
+      res => {
+        if (res.data) {
+          this.data.products = res.data;
+        }
+      }
     )
   }
 

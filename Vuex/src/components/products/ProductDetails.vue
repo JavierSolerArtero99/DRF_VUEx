@@ -37,7 +37,7 @@
         </div>
       </div>
       <Comments v-show="this.commentsView" :productId="data.product.id"/>
-      <button :disabled="isEditionMode" @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
+      <button @click="() => {this.commentsView = !this.commentsView}" class="button--comments">
         {{ this.commentsView ? 'Hide comments' : 'Show comments' }}
       </button>
     </div>
@@ -46,8 +46,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import ApiService from "../../common/api.service";
 import store, { storeTypes, Product } from "../../store";
-import { Route } from "vue-router";
 
 import Comments from "../comments/Comments.vue";
 
@@ -63,7 +63,6 @@ export default class ProductPreview extends Vue {
   }
     
   commentsView: boolean = false;
-  isEditionMode: boolean = false;
 
   data = {
     product: {} as Product,
@@ -71,6 +70,13 @@ export default class ProductPreview extends Vue {
   };
 
   mounted() {
+    if (this.$route.params.slug) {
+      ApiService.get('products', this.$route.params.slug).then(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 }
 </script>
