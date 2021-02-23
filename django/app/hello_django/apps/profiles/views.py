@@ -10,7 +10,7 @@ from .serializers import ProfileSerializer
 from rest_framework import viewsets
 
 
-#Admin
+# Admin
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -40,6 +40,36 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class ProfileUpdateAPIView(RetrieveAPIView):
+    queryset = Profile.objects.select_related('user')
+    renderer_classes = (ProfileJSONRenderer,)
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def put(self, request, username):
+        serializer_context = {
+            'request': request
+        }
+
+        try:
+            serializer_instance = self.queryset.get(user__username=username)
+        except Profile.DoesNotExist:
+            raise NotFound('A profile with this username does not exist.')
+
+        serializer_data = request.data.get('profile', {})
+        print(serializer_data)
+        serializer = self.serializer_class(
+            serializer_instance,
+            context=serializer_context,
+            data=serializer_data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class KarmaProfile(APIView):
     permission_classes = (AllowAny,)
     queryset = Profile.objects.select_related('user')
@@ -52,46 +82,3 @@ class KarmaProfile(APIView):
         serial = self.serializer_class(profile)
 
         return Response({"karma": serial.data.get('karma')}, status=status.HTTP_200_OK)
-
-
-
-
-# class ProfileFollowAPIView(APIView):
-#     permission_classes = (IsAuthenticated,)
-#     renderer_classes = (ProfileJSONRenderer,)
-#     serializer_class = ProfileSerializer
-
-#     def delete(self, request, username=None):
-#         follower = self.request.user.profile
-
-#         try:
-#             followee = Profile.objects.get(user__username=username)
-#         except Profile.DoesNotExist:
-#             raise NotFound('A profile with this username was not found.')
-
-#         follower.unfollow(followee)
-
-#         serializer = self.serializer_class(followee, context={
-#             'request': request
-#         })
-
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-#     def post(self, request, username=None):
-#         follower = self.request.user.profile
-
-#         try:
-#             followee = Profile.objects.get(user__username=username)
-#         except Profile.DoesNotExist:
-#             raise NotFound('A profile with this username was not found.')
-
-#         if follower.pk is followee.pk:
-#             raise serializers.ValidationError('You can not follow yourself.')
-
-#         follower.follow(followee)
-
-#         serializer = self.serializer_class(followee, context={
-#             'request': request
-#         })
-
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)

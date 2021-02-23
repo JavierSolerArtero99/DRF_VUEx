@@ -27,7 +27,8 @@
             <button class="buy" @click="buyProduct">Buy</button>
             <button
               v-if="data.product.author.id !== data.currentUser.id"
-              class="icon icon--blue"
+              v-bind:class="data.isLiked ? 'icon  liked' : 'icon icon--blue'"
+              @click="handleLike"
             ></button>
             <button
               v-if="data.product.author.id === data.currentUser.id"
@@ -46,8 +47,7 @@
                   $router.push({
                     name: 'editor',
                     params: { slug: data.product.slug },
-                  })
-              "
+                  })"
             ></button>
           </div>
         </div>
@@ -57,8 +57,7 @@
         @click="
           () => {
             this.commentsView = !this.commentsView;
-          }
-        "
+          }"
         class="button--comments"
       >
         {{ this.commentsView ? "Hide comments" : "Show comments" }}
@@ -91,6 +90,7 @@ export default class ProductPreview extends Vue {
   data = {
     product: {} as Product | null,
     currentUser: {} as User | null,
+    isLiked: false
   };
 
   beforeDestroy() {
@@ -105,13 +105,40 @@ export default class ProductPreview extends Vue {
       ApiService.get("products/" + this.$route.params.slug).then((res) => {
         if (res.data) {
           this.data.product = res.data;
+          if (this.data.product)
+          ApiService.get(`/products/${this.data.product.slug}/like`).then(
+            (data) => {
+              this.data.isLiked = true;
+            },
+            (err) => {
+              this.data.isLiked = false;
+            }
+          );
         }
       });
     }
   }
 
+  handleLike() {
+    if (this.data.product && store.getters.currentUser) {
+      if (!this.data.isLiked) {
+        ApiService.post(`/products/${this.data.product.slug}/like`, {}).then(
+          (data) => {
+            this.data.isLiked = true;
+          }
+        );
+      } else {
+        ApiService.delete(`/products/${this.data.product.slug}/like`).then(
+          (data) => {
+            this.data.isLiked = false;
+          }
+        );
+      }
+    }
+  }
+
   buyProduct() {
-    ApiService.post(`/products/buy/${this.data.product.slug}/`, {}).then(
+    if (this.data.product) ApiService.post(`/products/buy/${this.data.product.slug}`, {}).then(
       (data) => {
         this.showSuccess = true
       }
@@ -306,6 +333,11 @@ export default class ProductPreview extends Vue {
   background-color: #5136ff;
 
   background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/heartgrey.png?raw=true");
+}
+
+.liked {
+  background-color: #5136ff;
+  background-image: url("https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/heartgreyfill.png?raw=true");
 }
 
 .icon--orange {
