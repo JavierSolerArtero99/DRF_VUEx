@@ -91,39 +91,7 @@ class ProductViewSet(
 
 class LikeProductAPIView(APIView):
     permission_classes = (IsAuthenticated,)
-    # renderer_classes = (ArticleJSONRenderer,)
     serializer_class = LikeSerializer
-    queryset = Like.objects.select_related(
-        'likeAuthor', 'likeAuthor', 'likeProduct', 'likeProduct', )
-
-    def get_queryset(self):
-        queryset = self.queryset
-
-        # author = self.request.query_params.get('author', None)
-        # if author is not None:
-        #     queryset = queryset.filter(author__user__username=author)
-        return queryset
-
-
-    def delete(self, request, product_slug=None):
-        profile = self.request.user.profile
-        # serializer_context = {'request': request}
-
-        try:
-            product = Product.objects.get(slug=product_slug)
-        except Product.DoesNotExist:
-            raise NotFound('A product with this slug was not found.')
-
-        # try:
-        #     like = Like.objects.get(likeAuthor=profile)
-        # except Like.DoesNotExist:
-        #     raise NotFound('LIKE not found.')
-
-        # profile.unfavorite(article)
-
-        # serializer = self.serializer_class(article, context=serializer_context)
-
-        return Response({"product": "Like deleted"}, status=status.HTTP_200_OK)
 
     # Obtiene si el usuario le ha dado like a ese producto
     def get(self, request, product_slug=None):
@@ -142,7 +110,7 @@ class LikeProductAPIView(APIView):
         except Like.DoesNotExist:
             raise NotFound('LIKE not found.')
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, product_slug=None):
         profile = self.request.user.profile
@@ -156,10 +124,27 @@ class LikeProductAPIView(APIView):
         # Finding like
         try:
             like = Like.objects.get(likeAuthor=profile, likeProduct=product)
-            print(like)
-            serializer = self.serializer_class(like)
+            return Response({"details": "Product already Liked"}, status=status.HTTP_208_ALREADY_REPORTED)
         except Like.DoesNotExist:
-            print("NOOO")
-            # raise NotFound('LIKE not found.')
+            newLike = Like(likeAuthor=profile, likeProduct=product)
+            newLike.save()
 
-        return Response({"serializer.data": "fd"}, status=status.HTTP_201_CREATED)
+        return Response({"details": "Successfull liked"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, product_slug=None):
+        profile = self.request.user.profile
+
+        # Finding product
+        try:
+            product = Product.objects.get(slug=product_slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        # Finding like
+        try:
+            like = Like.objects.get(likeAuthor=profile, likeProduct=product)
+            like.delete()
+        except Like.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        return Response({"details": "Successfull deleted"}, status=status.HTTP_201_CREATED)
