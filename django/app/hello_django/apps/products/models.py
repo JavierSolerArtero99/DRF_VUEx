@@ -42,4 +42,4 @@ class Like(models.Model):
         'products.Product', related_name='likeProduct', on_delete=models.CASCADE, default=0)
 
     def __str__(self):
-        return self.likes
+        return f"{self.likes}"

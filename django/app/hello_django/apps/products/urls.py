@@ -3,7 +3,8 @@
 # from rest_framework.routers import DefaultRouter
 
 from .views import (
-    ProductViewSet
+    ProductViewSet,
+    LikeProductAPIView
 )
 
 # # router = DefaultRouter(trailing_slash=False)
@@ -19,6 +20,8 @@ router.register(r'products', ProductViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^products/(?P<product_slug>[-\w]+)/like/?$',
+        LikeProductAPIView.as_view()),
 ]
 # urlpatterns = [
 #     url(r'^products/?$', csrf_exempt(ProductViewSet)),
