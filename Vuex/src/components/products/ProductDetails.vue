@@ -14,8 +14,13 @@
 
           <p class="description">{{ data.product.description }}</p>
 
+          <div v-if="showSuccess" @click="() => showSuccess = false" class="container-success">
+            <b>Confirmed deal!</b>
+            <p>Thanks for your bought: {{ data.product.title }}</p>
+          </div>
+
           <div class="buttons-container">
-            <button class="buy">Buy</button>
+            <button class="buy" @click="() => showSuccess = true">Buy</button>
             <button
               v-if="data.product.author.id !== data.currentUser.id"
               class="icon icon--blue"
@@ -47,8 +52,8 @@
         @click="
           () => {
             this.commentsView = !this.commentsView;
-          }
-        "
+          }"
+
         class="button--comments"
       >
         {{ this.commentsView ? "Hide comments" : "Show comments" }}
@@ -76,6 +81,7 @@ export default class ProductPreview extends Vue {
   }
 
   commentsView: boolean = false;
+  showSuccess: boolean = false;
 
   data = {
     product: {} as Product | null,
@@ -89,6 +95,7 @@ export default class ProductPreview extends Vue {
 
   mounted() {
     this.data.currentUser = store.getters.currentUser;
+
     if (this.$route.params.slug) {
       ApiService.get("products/" + this.$route.params.slug).then((res) => {
         if (res.data) {
@@ -355,6 +362,34 @@ export default class ProductPreview extends Vue {
 .image-container img {
   max-width: 50%;
   max-height: 50%;
+}
+
+.container-success {
+  height: fit-content;
+  width: 250px;
+
+  margin: 1.5rem;
+  padding: 1rem;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  border-radius: 0.3rem;
+
+  line-height: 2rem;
+
+  background-color: #31df75;
+  color: white;
+}
+
+.container-success p {
+  line-height: 1.5rem;
+}
+
+.container-success img {
+  width: 30px;
+  height: 30px;
 }
 
 button:focus {

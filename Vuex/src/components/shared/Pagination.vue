@@ -64,7 +64,7 @@ export default class Pagination extends Vue {
   justify-content: space-between;
   align-items: center;
 
-  padding: 0;
+  padding-top: 1rem;
 }
 
 .button-focus {

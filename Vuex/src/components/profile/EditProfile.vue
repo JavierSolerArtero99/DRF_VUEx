@@ -13,7 +13,7 @@
             <input
               class="editProfile__input"
               id="username"
-              v-model="data.username"
+              v-model="data.currentUser.username"
               type="text"
               name="username"
               required
@@ -24,7 +24,7 @@
             <input
               class="editProfile__input"
               id="email"
-              v-model="data.email"
+              v-model="data.currentUser.email"
               type="email"
               name="email"
               required
@@ -35,9 +35,20 @@
             <input
               class="editProfile__input"
               id="password"
-              v-model="data.password"
+              v-model="data.currentUser.password"
               type="password"
               name="password"
+              required
+            />
+          </div>
+          <div>
+            <label for="bio">Bio</label>
+            <input
+              class="editProfile__input"
+              id="bio"
+              v-model="data.currentUser.bio"
+              type="text"
+              name="bio"
               required
             />
           </div>
@@ -59,7 +70,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import store, { storeTypes, User} from "../../store";
 import { Route } from "vue-router";
 
 @Component({
@@ -67,9 +78,7 @@ import { Route } from "vue-router";
 })
 export default class EditProfile extends Vue {
   data = {
-    username: "jasoka",
-    email: "jasoka@gmail.com",
-    password: "",
+    currentUser: {} as User | null,
   };
 
   errors: string[];
@@ -80,14 +89,28 @@ export default class EditProfile extends Vue {
     this.errors = [];
   }
 
+  beforeDestroy() {
+    this.data.currentUser = null;
+  }
+
+  mounted() {
+    this.data.currentUser = store.getters.currentUser;
+  }
+
   checkForm(e) {
     this.errors = [];
 
+    if (!this.data.currentUser) {
+      this.errors.push("An error has ocurred during the update");
+      e.preventDeafult();
+      return;
+    }
+
     if (
-      this.data.username.length >= 3 &&
-      this.data.username.length <= 15 &&
-      this.data.password.length >= 8 &&
-      this.data.password.length <= 30
+      this.data.currentUser.username.length >= 3 &&
+      this.data.currentUser.username.length <= 15 &&
+      this.data.currentUser.password.length >= 8 &&
+      this.data.currentUser.password.length <= 30
     ) {
       // this.handleRegister
       if (!this.handleAuth()) {
@@ -98,9 +121,9 @@ export default class EditProfile extends Vue {
       this.$router.push({ path: "/" });
     }
 
-    if (this.data.username.length < 3 || this.data.username.length > 15)
+    if (this.data.currentUser && this.data.currentUser.username.length < 3 || this.data.currentUser.username.length > 15)
       this.errors.push("Username must be at least 3 characters.");
-    if (this.data.password.length < 8 || this.data.password.length > 30)
+    if (this.data.currentUser && this.data.currentUser.password.length < 8 || this.data.currentUser.password.length > 30)
       this.errors.push("Password must be at least 8 characters.");
 
     e.preventDefault();

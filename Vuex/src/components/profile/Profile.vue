@@ -12,12 +12,11 @@
           src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true"
           alt="profile picture"
         />
-        <span class="username">Jasoka</span>
-        <span class="email">jasoka@gmail.com</span>
+        <span class="username">{{ data.currentUser.username }}</span>
+        <span class="email">{{ data.currentUser.email }}</span>
 
         <cite
-          >Lorem ipsum dolor sit amet consectete perferendis libero optio
-          eiustam saepe quas</cite
+          >{{ data.currentUser.bio }}</cite
         >
       </div>
 
@@ -44,20 +43,24 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import store, { storeTypes } from "../../store";
+import store, { storeTypes, User } from "../../store";
 import { Route } from "vue-router";
 
 @Component({
   name: "profile",
 })
 export default class Profile extends Vue {
-  data = {};
+  data = {
+    currentUser: {} as User,
+  };
 
   constructor() {
     super();
   }
 
-  mounted() {}
+  mounted() {
+    this.data.currentUser = store.getters.currentUser;
+  }
 }
 </script>
 

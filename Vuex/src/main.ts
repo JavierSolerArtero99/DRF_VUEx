@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App.vue";
-import store from "./store";
+import store, { storeTypes } from "./store";
 import { vuetify } from "./core/plugins";
 import { currency } from "./core/filters";
 import {
@@ -15,6 +15,7 @@ import {
   ProductEditor
 } from "./components";
 import ApiService from "./common/api.service";
+import { getToken } from "./common/jwt.service";
 
 Vue.use(VueRouter);
 
@@ -66,10 +67,13 @@ const router = new VueRouter({
 });
 
 function checkRoutePermissions(failurePath: string, property: any, to, from, next): void {
-  if (store.getters.currentUser[property]) {
+  if (getToken()) 
+    store.dispatch(storeTypes.root.actions!.autoAuth()).then();
+  
+  if (store.getters.currentUser[property])
     next();
 
-  } else next({ path: failurePath })
+  next({ path: failurePath })
 }
 
 new Vue({
