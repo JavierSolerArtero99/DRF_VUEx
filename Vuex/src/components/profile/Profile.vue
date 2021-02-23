@@ -24,7 +24,7 @@
             src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/upload.png?raw=true"
             alt="uploads"
           />
-          <span>1</span>
+          <span>{{ data.productCount }}</span>
         </div>
         <div class="dashboard-card">
           <img
@@ -52,6 +52,7 @@ export default class Profile extends Vue {
   data = {
     currentUser: {} as User,
     karma: 0 as number,
+    productCount: 0 as number,
   };
 
   constructor() {
@@ -67,6 +68,14 @@ export default class Profile extends Vue {
       })
       .catch((err) => {
         this.data.karma = 0;
+      });
+
+    ApiService.get("productsByUser")
+      .then((data) => {
+        this.data.productCount = data.data.length
+      })
+      .catch((err) => {
+        this.data.productCount = 0
       });
   }
 }

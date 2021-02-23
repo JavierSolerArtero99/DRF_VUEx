@@ -240,7 +240,7 @@ class CommentsDestroyAPIView(generics.DestroyAPIView):
 class BuyProductAPIView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = ProfileSerializer
-            
+
     def post(self, request, product_slug=None, comment_pk=None):
         profile = self.request.user.profile
 
@@ -271,4 +271,4 @@ class ProductsByUser(APIView):
         except Product.DoesNotExist:
             raise NotFound('A product with this slug was not found.')
 
-        return Response(serialized.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(serialized.data, status=status.HTTP_200_OK)
