@@ -16,7 +16,6 @@ export default Vue.extend({
   computed: {
   },
   mounted() {
-    console.log("Hey");
   },
 });
 </script>

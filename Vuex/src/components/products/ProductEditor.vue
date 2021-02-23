@@ -68,8 +68,8 @@
 import Vue from "vue";
 
 import Component from "vue-class-component";
-import ApiService from "../../common/api.service";
-import store, { Product } from "../../store";
+import ApiService from "../../../../vuex/src/common/api.service";
+import store, { Product } from "../../../../vuex/src/store";
 import { Route } from "vue-router";
 
 @Component({
@@ -116,8 +116,6 @@ export default class CreateProduct extends Vue {
 
       ApiService.post("products/", { product: this.data.product })
         .then((data) => {
-          console.log(data.data);
-
           this.$router.push({
             name: "details",
             params: { slug: data.data.slug },
