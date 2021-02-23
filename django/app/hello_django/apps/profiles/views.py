@@ -40,6 +40,22 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class KarmaProfile(APIView):
+    permission_classes = (AllowAny,)
+    queryset = Profile.objects.select_related('user')
+    # renderer_classes = (ProfileJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def get(self, request):
+        profile = self.request.user.profile
+
+        serial = self.serializer_class(profile)
+
+        return Response({"karma": serial.data.get('karma')}, status=status.HTTP_200_OK)
+
+
+
+
 # class ProfileFollowAPIView(APIView):
 #     permission_classes = (IsAuthenticated,)
 #     renderer_classes = (ProfileJSONRenderer,)

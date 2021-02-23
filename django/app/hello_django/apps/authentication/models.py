@@ -65,6 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # the most common form of login credential at the time of writing.
     email = models.EmailField(db_index=True, unique=True)
 
+    # karma = models.IntegerField(db_index=True)
+
     # When a user no longer wishes to use our platform, they may try to delete
     # there account. That's a problem for us because the data we collect is
     # valuable to us and we don't want to delete it. To solve this problem, we
