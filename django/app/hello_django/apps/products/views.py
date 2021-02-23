@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from rest_framework.views import APIView
-from rest_framework import status, mixins, viewsets
+from rest_framework import status, mixins, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import (
@@ -220,20 +220,18 @@ class CommentAPIView(APIView):
 
         return Response({"details": "Comment created"}, status=status.HTTP_201_CREATED)
 
-    # def delete(self, request, product_slug=None):
-    #     profile = self.request.user.profile
 
-    #     # Finding product
-    #     try:
-    #         product = Product.objects.get(slug=product_slug)
-    #     except Product.DoesNotExist:
-    #         raise NotFound('A product with this slug was not found.')
+class CommentsDestroyAPIView(generics.DestroyAPIView):
+    lookup_url_kwarg = 'comment_pk'
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = Comment.objects.all()
 
-    #     # Finding like
-    #     try:
-    #         like = Like.objects.get(likeAuthor=profile, likeProduct=product)
-    #         like.delete()
-    #     except Like.DoesNotExist:
-    #         raise NotFound('A product with this slug was not found.')
+    def destroy(self, request, product_slug=None, comment_pk=None):
+        try:
+            comment = Comment.objects.get(pk=comment_pk)
+        except Comment.DoesNotExist:
+            raise NotFound('A comment with this ID does not exist.')
 
-    #     return Response({"details": "Successfull deleted"}, status=status.HTTP_201_CREATED)
+        comment.delete()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
