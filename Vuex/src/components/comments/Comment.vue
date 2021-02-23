@@ -3,20 +3,20 @@
     <div v-bind:class="data.isOwner ? 'com-wrapper  com-wrapper--owner' : 'com-wrapper'">
       <div v-bind:class="data.isOwner ? 'com  com--owner' : 'com'">
         <div class="avatar-container">
-          <img v-bind:src="comment.author.image" alt="avatar">
+          <img v-bind:src="comment.commentAuthor.image" alt="avatar">
         </div>
-        <p>{{ comment.body }}</p>
+        <p>{{ comment.message }}</p>
       </div>
       <div v-bind:class="data.isOwner && 'actions-container'">
-        <span>{{ comment.author.username }}</span>
-        <button v-if="data.isOwner"></button>
+        <span>{{ comment.commentAuthor.username }}</span>
+        <button @click="deleteComment(comment.id)" v-if="data.isOwner"></button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Emit } from "vue-property-decorator";
 import store, { storeTypes, Product, Comment } from "../../store";
 import { Route } from "vue-router";
 
@@ -32,12 +32,17 @@ export default class CommentComponent extends Vue {
   }
 
   mounted() {
-    this.data.isOwner = store.getters.currentUser.id === this.comment.author.id;
+    this.data.isOwner = store.getters.currentUser.id === this.comment.commentAuthor.id;
   }
 
   data = {
     currentUser: store.getters.currentUser,
     isOwner: false
+  }
+
+  @Emit("delete-comment")
+  deleteComment(commentId) {
+    return commentId;
   }
 }
 </script>

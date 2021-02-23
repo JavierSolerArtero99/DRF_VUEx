@@ -17,7 +17,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       username: payload.username,
       password: "",
       email: payload.email,
-      image: payload.image,
+      image: payload.image ? payload.image : 'https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true',
       bio: payload.bio,
       isAuthed: true,
       isAdmin: false

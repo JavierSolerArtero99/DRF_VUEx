@@ -50,9 +50,9 @@ export type Product = {
 
 export type Comment = {
   id: number;
-  body: string;
-  author: User,
-  product: Product;
+  message: string;
+  commentAuthor: User,
+  commentProduct: Product;
 }
 
 export const initialRootState: RootState = {

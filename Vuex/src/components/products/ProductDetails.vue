@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <Comments v-show="this.commentsView" :productId="data.product.id" />
+      <Comments v-show="this.commentsView" :productSlug="data.product.slug" />
       <button
         @click="
           () => {
