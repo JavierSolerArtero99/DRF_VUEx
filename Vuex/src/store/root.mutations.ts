@@ -20,7 +20,7 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       image: payload.image ? payload.image : 'https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true',
       bio: payload.bio,
       isAuthed: true,
-      isAdmin: false
+      isAdmin: false,
     }
   },
   purgeCurrentUser(state) {
@@ -32,7 +32,8 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
       image: "",
       bio: "",
       isAuthed: false,
-      isAdmin: false
+      isAdmin: false,
+      karma: 0
     }
   },
 };

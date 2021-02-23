@@ -69,7 +69,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ApiService from "../../common/api.service";
-import store, { storeTypes, Product, User } from "../../store";
+import store, { storeTypes, Product, User } from "../../store"
 
 import Comments from "../comments/Comments.vue";
 

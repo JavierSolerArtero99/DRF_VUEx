@@ -12,7 +12,7 @@ export type User = {
   email: string;
   image: string;
   bio: string;
-  karma: number;
+  karma?: number;
   isAuthed: boolean;
   isAdmin: boolean;
 }

@@ -2,6 +2,10 @@
   <div>
     <Header />
     <router-view />
+    <div v-show="$route.path !== '/#/app'" class="welcome-container">
+      <span>Welcome to our <strong class="highlight">shop</strong>!</span>
+      <p>Enjoy your stay, and don't forget to shop some products</p>
+    </div>
     <Footer />
   </div>
 </template>
@@ -13,9 +17,8 @@ import Component from "vue-class-component";
 import Header from "../shared/Header.vue";
 import Footer from "../shared/Footer.vue";
 
-import ApiService from "../../common/api.service";
 import { store, storeTypes } from "../../store";
-import { destroyToken, getToken } from "../../common/jwt.service";
+import { getToken } from "../../common/jwt.service";
 
 @Component({
   name: "home",
@@ -38,4 +41,31 @@ export default class Home extends Vue {
 </script>
 
 <style scoped>
+
+.welcome-container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-container span {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffad37;
+}
+
+.highlight {
+  color: #5136ff;
+  font-weight: 900;
+}
+
+.welcome-container p {
+  font-size: 1.5rem;
+  color: white;
+}
+
 </style>
