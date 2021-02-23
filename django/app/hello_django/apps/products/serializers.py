@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Like
+from .models import Product, Like, Comment
 from ..profiles.serializers import ProfileSerializer
 
 
@@ -45,4 +45,19 @@ class LikeSerializer(serializers.ModelSerializer):
             'likes',
             'likeAuthor',
             'likeProduct',
+        )
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    message = serializers.CharField(required=True)
+    commentAuthor = ProfileSerializer(required=False)
+    commentProduct = ProductSerializer(required=False)
+
+    class Meta:
+        model = Comment
+        fields = (
+            'id',
+            'message',
+            'commentAuthor',
+            'commentProduct',
         )

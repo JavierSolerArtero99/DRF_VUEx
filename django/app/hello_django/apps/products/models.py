@@ -18,6 +18,7 @@ from django.db import models
 
 from ..profiles.models import Profile
 
+
 class Product(models.Model):
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     title = models.CharField(db_index=True, max_length=255)
@@ -27,10 +28,12 @@ class Product(models.Model):
     body = models.TextField()
     price = models.FloatField(default=0)
 
-    author = models.ForeignKey('profiles.Profile', related_name = 'profile', on_delete = models.CASCADE)
+    author = models.ForeignKey(
+        'profiles.Profile', related_name='profile', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
 
 class Like(models.Model):
     likes = models.IntegerField(default=0)
@@ -40,6 +43,19 @@ class Like(models.Model):
 
     likeProduct = models.ForeignKey(
         'products.Product', related_name='likeProduct', on_delete=models.CASCADE, default=0)
+
+    def __str__(self):
+        return f"{self.likes}"
+
+
+class Comment(models.Model):
+    message = models.CharField(default="",  max_length=255)
+
+    commentAuthor = models.ForeignKey(
+        'profiles.Profile', related_name='commentAuthor', on_delete=models.CASCADE)
+
+    commentProduct = models.ForeignKey(
+        'products.Product', related_name='commentProduct', on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return f"{self.likes}"

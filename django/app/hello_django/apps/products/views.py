@@ -7,8 +7,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAuthenticated)
 
-from .models import Product, Like
-from .serializers import ProductSerializer, LikeSerializer
+from .models import Product, Like, Comment
+from .serializers import ProductSerializer, LikeSerializer, CommentSerializer
 from ..profiles.serializers import ProfileSerializer
 
 
@@ -88,13 +88,13 @@ class ProductViewSet(
             serializer_instance = self.queryset.get(slug=slug)
         except Product.DoesNotExist:
             raise NotFound('A product with this slug does not exist.')
-            
+
         serializer_data = request.data.get('product', {})
 
         serializer = self.serializer_class(
-            serializer_instance, 
+            serializer_instance,
             context=serializer_context,
-            data=serializer_data, 
+            data=serializer_data,
             partial=True
         )
         serializer.is_valid(raise_exception=True)
@@ -172,3 +172,68 @@ class LikeProductAPIView(APIView):
             raise NotFound('A product with this slug was not found.')
 
         return Response({"details": "Successfull deleted"}, status=status.HTTP_201_CREATED)
+
+
+class CommentAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    # Obtiene los comentarios del producto que se ha pasado por slug
+    def get(self, request, product_slug=None):
+        profile = self.request.user.profile
+
+        # Finding product
+        try:
+            product = Product.objects.get(slug=product_slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        # Finding comments
+        try:
+            comments = Comment.objects.filter(commentProduct=product)
+            serializer = self.serializer_class(comments, many=True)
+        except Like.DoesNotExist:
+            raise NotFound('Comments not founds.')
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, product_slug=None):
+        profile = self.request.user.profile
+
+        # Finding product
+        try:
+            product = Product.objects.get(slug=product_slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        serializer_data = request.data.get('comment', {})
+        # author_serialized = request.data.get('product.user', {})
+        serializer = self.serializer_class(
+            data=serializer_data
+        )
+        serializer.is_valid(raise_exception=True)
+
+        # print(serializer.data.get('message'))
+        newComment = Comment(commentAuthor=profile, commentProduct=product,
+                             message=serializer.data.get('message'))
+        newComment.save()
+
+        return Response({"details": "Comment created"}, status=status.HTTP_201_CREATED)
+
+    # def delete(self, request, product_slug=None):
+    #     profile = self.request.user.profile
+
+    #     # Finding product
+    #     try:
+    #         product = Product.objects.get(slug=product_slug)
+    #     except Product.DoesNotExist:
+    #         raise NotFound('A product with this slug was not found.')
+
+    #     # Finding like
+    #     try:
+    #         like = Like.objects.get(likeAuthor=profile, likeProduct=product)
+    #         like.delete()
+    #     except Like.DoesNotExist:
+    #         raise NotFound('A product with this slug was not found.')
+
+    #     return Response({"details": "Successfull deleted"}, status=status.HTTP_201_CREATED)
