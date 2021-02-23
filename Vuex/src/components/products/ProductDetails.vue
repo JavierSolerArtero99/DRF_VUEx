@@ -14,13 +14,17 @@
 
           <p class="description">{{ data.product.description }}</p>
 
-          <div v-if="showSuccess" @click="() => showSuccess = false" class="container-success">
+          <div
+            v-if="showSuccess"
+            @click="() => (showSuccess = false)"
+            class="container-success"
+          >
             <b>Confirmed deal!</b>
             <p>Thanks for your bought: {{ data.product.title }}</p>
           </div>
 
           <div class="buttons-container">
-            <button class="buy" @click="() => showSuccess = true">Buy</button>
+            <button class="buy" @click="buyProduct">Buy</button>
             <button
               v-if="data.product.author.id !== data.currentUser.id"
               class="icon icon--blue"
@@ -42,7 +46,8 @@
                   $router.push({
                     name: 'editor',
                     params: { slug: data.product.slug },
-                  })"
+                  })
+              "
             ></button>
           </div>
         </div>
@@ -52,8 +57,8 @@
         @click="
           () => {
             this.commentsView = !this.commentsView;
-          }"
-
+          }
+        "
         class="button--comments"
       >
         {{ this.commentsView ? "Hide comments" : "Show comments" }}
@@ -103,6 +108,14 @@ export default class ProductPreview extends Vue {
         }
       });
     }
+  }
+
+  buyProduct() {
+    ApiService.post(`/products/buy/${this.data.product.slug}/`, {}).then(
+      (data) => {
+        this.showSuccess = true
+      }
+    );
   }
 
   remove() {

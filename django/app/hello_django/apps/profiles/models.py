@@ -22,6 +22,8 @@ class Profile(TimestampedModel):
     # avatar. Similar to `bio`, this field is not required. It may be blank.
     image = models.URLField(blank=True)
 
+    karma = models.IntegerField(default=0)
+
     # This is an example of a Many-To-Many relationship where both sides of the
     # relationship are of the same model. In this case, the model is `Profile`.
     # As mentioned in the text, this relationship will be one-way. Just because
@@ -37,6 +39,10 @@ class Profile(TimestampedModel):
     #     'articles.Article',
     #     related_name='favorited_by'
     # )
+
+    def buyProduct(self):
+        self.karma = self.karma + 1
+    
 
 
     def __str__(self):
