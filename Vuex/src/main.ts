@@ -33,17 +33,26 @@ const router = new VueRouter({
       component: Home,
       children: [
         { path: "products", component: Products },
-        { path: "editor/", component: ProductEditor },
-        { path: "editor/:slug", component: ProductEditor },
-        { path: "products/:slug", name: "details", component: ProductDetails },
+        { 
+          path: "editor/", component: ProductEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        { 
+          path: "editor/:slug", name: "editor", component: ProductEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        { 
+          path: "products/:slug", name: "details", component: ProductDetails,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
         { path: "about", component: Products },
         {
           path: 'profile', component: Profile, 
-            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAuthed', to, from, next)
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         { 
           path: "profile-edit", component: EditProfile,
-            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAuthed', to, from, next)
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         { 
           path: "panel-admin", component: EditProfile,
