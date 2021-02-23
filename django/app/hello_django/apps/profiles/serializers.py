@@ -7,12 +7,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     bio = serializers.CharField(allow_blank=True, required=False)
     image = serializers.CharField(allow_blank=True, required=False)
+    karma = serializers.IntegerField()
     # image = serializers.SerializerMethodField()
     # following = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ('username', 'bio', 'image')
+        fields = ('username', 'bio', 'image', 'karma')
         # fields = ('username', 'bio', 'image', 'following',)
         read_only_fields = ('username',)
 

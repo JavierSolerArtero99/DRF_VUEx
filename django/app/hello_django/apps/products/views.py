@@ -235,3 +235,22 @@ class CommentsDestroyAPIView(generics.DestroyAPIView):
         comment.delete()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+
+class BuyProductAPIView(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = ProfileSerializer
+            
+    def post(self, request, product_slug=None, comment_pk=None):
+        profile = self.request.user.profile
+
+        # Finding product
+        try:
+            product = Product.objects.get(slug=product_slug)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        profile.buyProduct()
+        profile.save()
+
+        return Response({"Success": "Product buyed (karma updated)"}, status=status.HTTP_204_NO_CONTENT)
