@@ -5,9 +5,9 @@
         <img
           @click="
             () => {
-              $router.push({ path: '/app/profile-edit' })
-            }"
-
+              $router.push({ path: '/app/profile-edit' });
+            }
+          "
           class="picture"
           src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true"
           alt="profile picture"
@@ -15,25 +15,23 @@
         <span class="username">{{ data.currentUser.username }}</span>
         <span class="email">{{ data.currentUser.email }}</span>
 
-        <cite
-          >{{ data.currentUser.bio }}</cite
-        >
+        <cite>{{ data.currentUser.bio }}</cite>
       </div>
 
       <div class="dashboard">
         <div class="dashboard-card">
           <img
-            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/fire.png?raw=true"
+            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/upload.png?raw=true"
             alt="uploads"
           />
           <span>1</span>
         </div>
         <div class="dashboard-card">
           <img
-            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/upload.png?raw=true"
+            src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/fire.png?raw=true"
             alt="karma"
           />
-          <span>1</span>
+          <span>{{ data.karma }}</span>
         </div>
       </div>
     </div>
@@ -45,6 +43,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import store, { storeTypes, User } from "../../store";
 import { Route } from "vue-router";
+import ApiService from "../../common/api.service";
 
 @Component({
   name: "profile",
@@ -52,6 +51,7 @@ import { Route } from "vue-router";
 export default class Profile extends Vue {
   data = {
     currentUser: {} as User,
+    karma: 0 as number,
   };
 
   constructor() {
@@ -60,6 +60,14 @@ export default class Profile extends Vue {
 
   mounted() {
     this.data.currentUser = store.getters.currentUser;
+    // console.log(store.getters.currentUser);
+    ApiService.get("profileKarma")
+      .then((data) => {
+        this.data.karma = data.data.karma;
+      })
+      .catch((err) => {
+        this.data.karma = 0;
+      });
   }
 }
 </script>

@@ -12,6 +12,7 @@ export type User = {
   email: string;
   image: string;
   bio: string;
+  karma: number;
   isAuthed: boolean;
   isAdmin: boolean;
 }
@@ -64,6 +65,7 @@ export const initialRootState: RootState = {
     email: "",
     image: "",
     bio: "",
+    karma: 0,
     isAuthed: false,
     isAdmin: false
   },

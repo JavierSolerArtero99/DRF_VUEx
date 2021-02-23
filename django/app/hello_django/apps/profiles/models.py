@@ -22,7 +22,7 @@ class Profile(TimestampedModel):
     # avatar. Similar to `bio`, this field is not required. It may be blank.
     image = models.URLField(blank=True)
 
-    karma = models.IntegerField(default=0)
+    karma = models.IntegerField()
 
     # This is an example of a Many-To-Many relationship where both sides of the
     # relationship are of the same model. In this case, the model is `Profile`.

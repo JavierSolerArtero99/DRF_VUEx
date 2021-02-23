@@ -10,7 +10,7 @@ from .serializers import ProfileSerializer
 from rest_framework import viewsets
 
 
-#Admin
+# Admin
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -39,6 +39,7 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class ProfileUpdateAPIView(RetrieveAPIView):
     queryset = Profile.objects.select_related('user')
     renderer_classes = (ProfileJSONRenderer,)
@@ -65,5 +66,19 @@ class ProfileUpdateAPIView(RetrieveAPIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        
+
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class KarmaProfile(APIView):
+    permission_classes = (AllowAny,)
+    queryset = Profile.objects.select_related('user')
+    # renderer_classes = (ProfileJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def get(self, request):
+        profile = self.request.user.profile
+
+        serial = self.serializer_class(profile)
+
+        return Response({"karma": serial.data.get('karma')}, status=status.HTTP_200_OK)
