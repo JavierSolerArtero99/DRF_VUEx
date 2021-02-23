@@ -10,7 +10,7 @@
 
 from django.conf.urls import url
 from django.urls import reverse
-from .views import ProfileRetrieveAPIView, ProfileViewSet
+from .views import ProfileRetrieveAPIView, ProfileUpdateAPIView, ProfileViewSet
 # from .views import ProfileRetrieveAPIView, ProfileFollowAPIView, ProfileViewSet
 
 app_name = 'profiles'
@@ -28,7 +28,8 @@ profile_detail = ProfileViewSet.as_view({
 })
 
 urlpatterns = [
-    url(r'^profiles/(?P<username>\w+)/?$', ProfileRetrieveAPIView.as_view()),
+    # url(r'^profiles/(?P<username>\w+)/?$', ProfileRetrieveAPIView.as_view()),
+    url(r'^profiles/(?P<username>\w+)/?$', ProfileUpdateAPIView.as_view()),
     # url(r'^profiles/(?P<username>\w+)/follow/?$', ProfileFollowAPIView.as_view()),
     
     #Admin

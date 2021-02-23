@@ -46,7 +46,6 @@ const router = new VueRouter({
           path: "products/:slug", name: "details", component: ProductDetails,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
-        { path: "about", component: Products },
         {
           path: 'profile', component: Profile, 
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)

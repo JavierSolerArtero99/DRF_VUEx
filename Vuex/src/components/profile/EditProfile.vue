@@ -30,7 +30,7 @@
               required
             />
           </div>
-          <div>
+          <!-- <div>
             <label for="password">Password</label>
             <input
               class="editProfile__input"
@@ -40,7 +40,7 @@
               name="password"
               required
             />
-          </div>
+          </div> -->
           <div>
             <label for="bio">Bio</label>
             <input
@@ -70,8 +70,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import store, { storeTypes, User} from "../../store";
+import store, { storeTypes, User } from "../../store";
 import { Route } from "vue-router";
+import ApiService from "../../common/api.service";
 
 @Component({
   name: "editProfile",
@@ -106,31 +107,20 @@ export default class EditProfile extends Vue {
       return;
     }
 
-    if (
-      this.data.currentUser.username.length >= 3 &&
-      this.data.currentUser.username.length <= 15 &&
-      this.data.currentUser.password.length >= 8 &&
-      this.data.currentUser.password.length <= 30
-    ) {
-      // this.handleRegister
-      if (!this.handleAuth()) {
+    ApiService.put("profiles/"+ this.data.currentUser.username, {
+      profile: this.data.currentUser,
+    })
+      .then((data) => {
+        console.log(data);
+        
+      })
+      .catch((err) => {
         this.errors.push("An error has ocurred during the update");
         e.preventDefault();
         return false;
-      }
-      this.$router.push({ path: "/" });
-    }
-
-    if (this.data.currentUser && this.data.currentUser.username.length < 3 || this.data.currentUser.username.length > 15)
-      this.errors.push("Username must be at least 3 characters.");
-    if (this.data.currentUser && this.data.currentUser.password.length < 8 || this.data.currentUser.password.length > 30)
-      this.errors.push("Password must be at least 8 characters.");
+      });
 
     e.preventDefault();
-  }
-
-  handleAuth(): boolean {
-    return false;
   }
 }
 </script>
