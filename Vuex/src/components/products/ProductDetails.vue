@@ -10,7 +10,7 @@
             >{{ data.product.price }} <span class="price-sufix">€</span></span
           >
           <h2 class="title">{{ data.product.title }}</h2>
-          <span class="subtitle">{{ data.product.subtitle }}</span>
+          <span class="subtitle">{{ data.product.author.username }}</span>
 
           <p class="description">{{ data.product.description }}</p>
 
@@ -210,6 +210,7 @@ export default class ProductPreview extends Vue {
 .subtitle {
   width: 100%;
   padding-left: 0.3rem;
+  font-style: italic;
 }
 
 .price {

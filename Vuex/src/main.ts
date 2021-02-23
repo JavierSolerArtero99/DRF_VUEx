@@ -67,13 +67,13 @@ const router = new VueRouter({
 });
 
 function checkRoutePermissions(failurePath: string, property: any, to, from, next): void {
-  if (getToken()) 
-    store.dispatch(storeTypes.root.actions!.autoAuth()).then();
-  
   if (store.getters.currentUser[property])
     next();
+  
+  if (getToken()) 
+    store.dispatch(storeTypes.root.actions!.autoAuth()).then(res => next(), err => next({ path: failurePath }));
 
-  next({ path: failurePath })
+  else next({ path: failurePath })
 }
 
 new Vue({
