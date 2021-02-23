@@ -254,3 +254,21 @@ class BuyProductAPIView(APIView):
         profile.save()
 
         return Response({"Success": "Product buyed (karma updated)"}, status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductsByUser(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    serializer_class = ProductSerializer
+
+    def get(self, request, comment_pk=None):
+        profile = self.request.user.profile
+
+        # Finding products
+        try:
+            product = Product.objects.filter(author=profile)
+            serialized = self.serializer_class(product, many=True)
+            print(serialized.data)
+        except Product.DoesNotExist:
+            raise NotFound('A product with this slug was not found.')
+
+        return Response(serialized.data, status=status.HTTP_204_NO_CONTENT)

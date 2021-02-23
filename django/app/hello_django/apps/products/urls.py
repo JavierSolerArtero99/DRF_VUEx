@@ -7,7 +7,8 @@ from .views import (
     LikeProductAPIView,
     CommentAPIView,
     CommentsDestroyAPIView,
-    BuyProductAPIView
+    BuyProductAPIView,
+    ProductsByUser
 )
 
 # # router = DefaultRouter(trailing_slash=False)
@@ -31,6 +32,8 @@ urlpatterns = [
         CommentsDestroyAPIView.as_view()),
     url(r'^products/buy/(?P<product_slug>[-\w]+)/?$',
         BuyProductAPIView.as_view()),
+    url(r'^productsByUser/?$',
+        ProductsByUser.as_view()),
 ]
 # urlpatterns = [
 #     url(r'^products/?$', csrf_exempt(ProductViewSet)),
